@@ -13,3 +13,6 @@ clap = { version = "4", features = ["derive"] }
 
 # reqwest Linux requirements
 openssl = { version = "0.10", features = ["vendored"] }
+toml = "0.8.12"
+serde_derive = "1.0.200"
+serde = "1.0.200"
