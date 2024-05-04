@@ -25,6 +25,36 @@ pastol [OPTIONS]
 - -h, --help: Print help.
 - -V, --version: Print version.
 
+## Build
+
+```sh
+# Install cargo
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Clone the repo
+git clone https://github.com/M1n-74316D65/Pastol
+
+# Build the crate
+cargo install --path .
+
+# For more info check the justfile or use just.
+```
+
+## Build
+
+```sh
+# Install cargo
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Clone the repo
+git clone https://github.com/M1n-74316D65/Pastol
+
+# Build the crate
+cargo build
+
+# For more info check the justfile or use just.
+```
+
 ## Setup
 
 ```sh
