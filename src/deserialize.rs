@@ -8,6 +8,7 @@ pub struct Config {
     // Define your configuration fields
     pub user: String,
     pub api_key: String,
+    pub unlist: bool,
 }
 
 pub fn deserialized() -> io::Result<Config> {

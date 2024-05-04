@@ -1,81 +1,219 @@
 use clap::Parser;
 
-use std::collections::HashMap;
-
 mod deserialize;
 mod file_reader;
+mod petitions;
 mod serializer;
 
-/// Simple program to upload or update a pastebin to paste.lol
+/// Paste.lol on the command line (cant list unlisted, only target unlisted).
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Upload a file to pastebin
-    #[arg(short, long)]
+    /// Upload a file or update an existing file on the pastebin.
+    #[structopt(short, long)]
     file: Option<String>,
 
-    /// Name of the new pastebin
-    #[arg(short, long)]
+    /// Title of the new pastebin or the title of the pastebin to update.
+    #[structopt(short, long)]
     title: Option<String>,
 
-    /// Content of the new pastebin
-    #[arg(short, long)]
+    /// Content of the new pastebin or the content of the pastebin to update.
+    #[structopt(short, long)]
     content: Option<String>,
 
-    /// Content of the new pastebin
-    #[arg(short, long, default_value_t = true)]
-    listed: bool,
+    /// WIP Download the content of a pastebin .
+    #[structopt(short, long)]
+    download: Option<String>,
 
-    /// Set for your paste.lol username.
-    #[arg(long)]
+    /// WIP Get detailed information about a pastebin.
+    #[structopt(short, long)]
+    info: Option<String>,
+
+    /// Remove a pastebin from the pastebin service.
+    #[structopt(short, long)]
+    remove: Option<String>,
+
+    /// WIP List all the publicly listed pastebins.
+    #[structopt(short, long, default_value = "true")]
+    list: bool,
+
+    /// Set your username for the pastebin service.
+    #[structopt(long)]
     setuser: Option<String>,
 
-    /// Set for your paste.lol api key
-    #[arg(long)]
+    /// Set your API key for the pastebin service.
+    #[structopt(long)]
     setapikey: Option<String>,
+
+    /// Set to true if you want newly created pastebins to be unlisted by default. (Default: false)
+    #[structopt(long)]
+    setunlist: Option<bool>,
 }
 
-#[tokio::main]
-async fn create_unlisted(
-    user: String,
-    api_key: String,
-    title: String,
-    content: String,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin/");
-    let mut map = HashMap::new();
-    map.insert("title", title);
-    map.insert("content", content);
-    let client = reqwest::Client::new();
-    client
-        .post(url)
-        .bearer_auth(api_key)
-        .json(&map)
-        .send()
-        .await?;
-    Ok(())
+fn run(args: Args, config: deserialize::Config) {
+    // println!("run");
+    // Remove
+    if args.remove.is_some() {
+        let result = petitions::remove(
+            config.user.clone(),
+            config.api_key.clone(),
+            args.remove.clone().unwrap(),
+        );
+        match result {
+            Ok(_config) => {
+                println!("");
+                println!("Sucessfully removed {}", args.remove.unwrap());
+            }
+            Err(e) => {
+                eprintln!("");
+                eprintln!("Error loading config: {}", e);
+            }
+        }
+    // Download
+    } else if args.download.is_some() {
+        let result = petitions::download(config.user.clone(), args.download.clone().unwrap());
+        match result {
+            Ok(_config) => {
+                println!("");
+                println!("Sucessfully downloaded {}", args.download.unwrap());
+            }
+            Err(e) => {
+                eprintln!("");
+                eprintln!("Error loading config: {}", e);
+            }
+        }
+    // Info
+    } else if args.info.is_some() {
+        let result = petitions::show(
+            config.user.clone(),
+            config.api_key.clone(),
+            args.info.clone().unwrap(),
+        );
+        match result {
+            Ok(_config) => {
+                println!("");
+                println!("Info: {}", args.info.unwrap());
+            }
+            Err(e) => {
+                eprintln!("");
+                eprintln!("Error loading config: {}", e);
+            }
+        }
+    // List
+    } else if args.list {
+        let result = petitions::list(config.user.clone(), config.api_key.clone());
+        match result {
+            Ok(_config) => {
+                println!("");
+                println!("List: {}", args.list);
+            }
+            Err(e) => {
+                eprintln!("");
+                eprintln!("Error loading config: {}", e);
+            }
+        }
+    // Create a listed
+    } else if !config.unlist {
+        petitions::create_listed(
+            config.user,
+            config.api_key,
+            if args.title.is_some() {
+                args.title.unwrap().to_string()
+            } else if args.file.is_some() {
+                file_reader::read_path(args.file.clone().unwrap())
+            } else {
+                "no_title".to_string()
+            },
+            if args.content.is_some() {
+                args.content.unwrap().to_string()
+            } else if args.file.is_some() {
+                file_reader::read_file(args.file.clone().unwrap()).unwrap()
+            } else {
+                "no_content".to_string()
+            },
+        )
+        .unwrap();
+    // Create a unlisted
+    } else if config.unlist {
+        petitions::create_unlisted(
+            config.user,
+            config.api_key,
+            if args.title.is_some() {
+                args.title.unwrap().to_string()
+            } else if args.file.is_some() {
+                file_reader::read_path(args.file.clone().unwrap())
+            } else {
+                "no_title".to_string()
+            },
+            if args.content.is_some() {
+                args.content.unwrap().to_string()
+            } else if args.file.is_some() {
+                file_reader::read_file(args.file.clone().unwrap()).unwrap()
+            } else {
+                "no_content".to_string()
+            },
+        )
+        .unwrap();
+    }
 }
 
-#[tokio::main]
-async fn create_listed(
-    user: String,
-    api_key: String,
-    title: String,
-    content: String,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin/");
-    let mut map = HashMap::new();
-    map.insert("title", title);
-    map.insert("content", content);
-    map.insert("listed", "".to_string());
-    let client = reqwest::Client::new();
-    client
-        .post(url)
-        .bearer_auth(api_key)
-        .json(&map)
-        .send()
-        .await?;
-    Ok(())
+fn serialize(user: String, api_key: String, unlist: bool, output: String) {
+    let result = serializer::serialize(user, api_key, unlist);
+    match result {
+        Ok(_config) => {
+            println!("");
+            println!("{} sucessfully set.", output);
+        }
+        Err(e) => {
+            eprintln!("");
+            eprintln!("Error loading config: {}", e);
+        }
+    }
+}
+
+fn check_user_and_api(args: Args, config: deserialize::Config) {
+    // println!("check_user_and_api");
+    if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
+        serialize(
+            if args.setuser.is_some() {
+                args.setuser.clone().unwrap()
+            } else {
+                config.user.clone()
+            },
+            if args.setapikey.is_some() {
+                args.setapikey.clone().unwrap()
+            } else {
+                config.api_key.clone()
+            },
+            if args.setunlist.is_some() {
+                args.setunlist.clone().unwrap()
+            } else {
+                config.unlist.clone()
+            },
+            if args.setuser.is_some() && args.setapikey.is_some() {
+                "User and api".to_string()
+            } else if args.setapikey.is_some() {
+                "Api".to_string()
+            } else if args.setuser.is_some() {
+                "User".to_string()
+            } else {
+                "Unlist".to_string()
+            },
+        );
+        let result = deserialize::deserialized();
+        match result {
+            Ok(config) => {
+                run(args, config);
+            }
+
+            // First run
+            Err(_e) => {
+                eprintln!("");
+            }
+        }
+    } else {
+        run(args, config);
+    }
 }
 
 fn main() {
@@ -83,135 +221,26 @@ fn main() {
     let result = deserialize::deserialized();
     match result {
         Ok(config) => {
-            if args.setuser.is_some() {
-                let result =
-                    serializer::serialize(args.setuser.clone().unwrap(), config.api_key.clone());
-                match result {
-                    Ok(config) => {
-                        println!("");
-                        println!("Sucessfully set user: {}", config.user.clone());
-                    }
-                    Err(e) => {
-                        println!("");
-                        eprintln!("Error loading config: {}", e);
-                    }
-                }
-            }
-            if args.setapikey.is_some() {
-                let result =
-                    serializer::serialize(config.user.clone(), args.setapikey.clone().unwrap());
-                match result {
-                    Ok(_config) => {
-                        println!("");
-                        println!("Sucessfully set api.");
-                    }
-                    Err(e) => {
-                        println!("");
-                        eprintln!("Error loading config: {}", e);
-                    }
-                }
-            }
-            if args.listed {
-                create_listed(
-                    config.user,
-                    config.api_key,
-                    if args.title.is_some() {
-                        args.title.unwrap().to_string()
-                    } else if args.file.is_some() {
-                        file_reader::read_path(args.file.clone().unwrap())
-                    } else {
-                        "no_title".to_string()
-                    },
-                    if args.content.is_some() {
-                        args.content.unwrap().to_string()
-                    } else if args.file.is_some() {
-                        file_reader::read_file(args.file.clone().unwrap()).unwrap()
-                    } else {
-                        "no_content".to_string()
-                    },
-                )
-                .unwrap();
-            } else {
-                create_unlisted(
-                    config.user,
-                    config.api_key,
-                    if args.title.is_some() {
-                        args.title.unwrap().to_string()
-                    } else if args.file.is_some() {
-                        file_reader::read_path(args.file.clone().unwrap())
-                    } else {
-                        "no_title".to_string()
-                    },
-                    if args.content.is_some() {
-                        args.content.unwrap().to_string()
-                    } else if args.file.is_some() {
-                        file_reader::read_file(args.file.clone().unwrap()).unwrap()
-                    } else {
-                        "no_content".to_string()
-                    },
-                )
-                .unwrap();
-            }
+            check_user_and_api(args, config);
         }
 
         // First run
         Err(_e) => {
-            if args.setuser.is_some() && args.setapikey.is_some() {
-                let result = serializer::serialize(
-                    args.setuser.clone().unwrap(),
-                    args.setapikey.clone().unwrap(),
-                );
-                match result {
-                    Ok(config) => {
-                        println!("");
-                        println!("Sucessfully set user: {}", config.user.clone());
-                        println!("");
-                        println!("Sucessfully set api.");
-                    }
-                    Err(e) => {
-                        println!("");
-                        eprintln!("Error loading config: {}", e);
-                    }
+            serialize(
+                "rust".to_string(),
+                "rocks".to_string(),
+                false,
+                "First run!".to_string(),
+            );
+            let result = deserialize::deserialized();
+            match result {
+                Ok(config) => {
+                    check_user_and_api(args, config);
                 }
-            } else {
-                let result = serializer::serialize("rust".to_string(), "rocks".to_string());
-                match result {
-                    Ok(_config) => {
-                        println!("");
-                        print!("Hello!");
-                    }
-                    Err(e) => {
-                        println!("");
-                        eprintln!("Error loading config: {}", e);
-                    }
-                }
-                if args.setuser.is_some() {
-                    let result =
-                        serializer::serialize(args.setuser.clone().unwrap(), "rocks".to_string());
-                    match result {
-                        Ok(config) => {
-                            println!("");
-                            println!("Sucessfully set user: {}", config.user.clone());
-                        }
-                        Err(e) => {
-                            println!("");
-                            eprintln!("Error loading config: {}", e);
-                        }
-                    }
-                }
-                if args.setapikey.is_some() {
-                    let result =
-                        serializer::serialize("rust".to_string(), args.setapikey.clone().unwrap());
-                    match result {
-                        Ok(_config) => {
-                            println!("");
-                            println!("Sucessfully set api.");
-                        }
-                        Err(e) => {
-                            println!("");
-                            eprintln!("Error loading config: {}", e);
-                        }
-                    }
+
+                // First run
+                Err(_e) => {
+                    eprintln!("");
                 }
             }
         }
@@ -227,7 +256,7 @@ mod tests {
         let api_key = "";
         let title = "new-paste";
         let content = "This is a new paste.";
-        create_listed(
+        petitions::create_listed(
             user.to_string(),
             api_key.to_string(),
             title.to_string(),

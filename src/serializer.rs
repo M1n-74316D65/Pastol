@@ -6,12 +6,14 @@ pub struct Config {
     // Define your configuration fields
     pub user: String,
     pub api_key: String,
+    pub unlist: bool,
 }
-pub fn serialize(user: String, api_key: String) -> io::Result<Config> {
+pub fn serialize(user: String, api_key: String, unlist: bool) -> io::Result<Config> {
     // Instantiate your configuration
     let config = Config {
         user: user,
         api_key: api_key,
+        unlist: unlist,
     };
 
     // Serialize the configuration to a TOML string
