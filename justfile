@@ -21,4 +21,4 @@ run-example-no-content: build clean
 run-exaple-remove: run-example clean
   ./target/debug/pastol -r example
 run-list: build clean
-  ./target/debug/pastol -list
+  ./target/debug/pastol --list
