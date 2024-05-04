@@ -6,6 +6,8 @@ test: clean
   cargo test
 check: clean
   cargo clippy
+install: clean
+  cargo install --path .
 run-help: build clean
   ./target/debug/pastol -h
 run-example: build clean

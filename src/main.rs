@@ -23,11 +23,11 @@ struct Args {
     content: Option<String>,
 
     /// WIP Download the content of a pastebin .
-    #[structopt(short, long)]
+    #[structopt(long)]
     download: Option<String>,
 
     /// WIP Get detailed information about a pastebin.
-    #[structopt(short, long)]
+    #[structopt(long)]
     info: Option<String>,
 
     /// Remove a pastebin from the pastebin service.
@@ -35,7 +35,7 @@ struct Args {
     remove: Option<String>,
 
     /// WIP List all the publicly listed pastebins.
-    #[structopt(short, long, default_value = "false")]
+    #[structopt(long, default_value = "false")]
     list: bool,
 
     /// Set your username for the pastebin service.
