@@ -240,8 +240,8 @@ mod tests {
     fn test_listed() {
         let user = "";
         let api_key = "";
-        let title = "new-paste";
-        let content = "This is a new paste.";
+        let title = "test";
+        let content = "This is a test.";
         petitions::create_listed(
             user.to_string(),
             api_key.to_string(),
