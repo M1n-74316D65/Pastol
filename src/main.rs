@@ -197,8 +197,7 @@ fn check_user_and_api(args: Args, config: deserialize::Config) {
             }
 
             // First run
-            Err(_e) => {
-            }
+            Err(_e) => {}
         }
     } else {
         run(args, config);
@@ -228,8 +227,7 @@ fn main() {
                 }
 
                 // First run
-                Err(_e) => {
-                }
+                Err(_e) => {}
             }
         }
     }
