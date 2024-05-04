@@ -61,11 +61,9 @@ fn run(args: Args, config: deserialize::Config) {
         );
         match result {
             Ok(_config) => {
-                println!("");
                 println!("Sucessfully removed {}", args.remove.unwrap());
             }
             Err(e) => {
-                eprintln!("");
                 eprintln!("Error loading config: {}", e);
             }
         }
@@ -74,11 +72,9 @@ fn run(args: Args, config: deserialize::Config) {
         let result = petitions::download(config.user.clone(), args.download.clone().unwrap());
         match result {
             Ok(_config) => {
-                println!("");
                 println!("Sucessfully downloaded {}", args.download.unwrap());
             }
             Err(e) => {
-                eprintln!("");
                 eprintln!("Error loading config: {}", e);
             }
         }
@@ -91,11 +87,9 @@ fn run(args: Args, config: deserialize::Config) {
         );
         match result {
             Ok(_config) => {
-                println!("");
                 println!("Info: {}", args.info.unwrap());
             }
             Err(e) => {
-                eprintln!("");
                 eprintln!("Error loading config: {}", e);
             }
         }
@@ -104,11 +98,9 @@ fn run(args: Args, config: deserialize::Config) {
         let result = petitions::list(config.user.clone(), config.api_key.clone());
         match result {
             Ok(_config) => {
-                println!("");
                 println!("List: {}", args.list);
             }
             Err(e) => {
-                eprintln!("");
                 eprintln!("Error loading config: {}", e);
             }
         }
@@ -161,11 +153,9 @@ fn serialize(user: String, api_key: String, unlist: bool, output: String) {
     let result = serializer::serialize(user, api_key, unlist);
     match result {
         Ok(_config) => {
-            println!("");
             println!("{} sucessfully set.", output);
         }
         Err(e) => {
-            eprintln!("");
             eprintln!("Error loading config: {}", e);
         }
     }
@@ -186,9 +176,9 @@ fn check_user_and_api(args: Args, config: deserialize::Config) {
                 config.api_key.clone()
             },
             if args.setunlist.is_some() {
-                args.setunlist.clone().unwrap()
+                args.setunlist.unwrap()
             } else {
-                config.unlist.clone()
+                config.unlist
             },
             if args.setuser.is_some() && args.setapikey.is_some() {
                 "User and api".to_string()
@@ -208,7 +198,6 @@ fn check_user_and_api(args: Args, config: deserialize::Config) {
 
             // First run
             Err(_e) => {
-                eprintln!("");
             }
         }
     } else {
@@ -240,7 +229,6 @@ fn main() {
 
                 // First run
                 Err(_e) => {
-                    eprintln!("");
                 }
             }
         }

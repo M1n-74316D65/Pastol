@@ -24,11 +24,11 @@ pub fn read_path(file_path: String) -> String {
     // Get the file name
     if let Some(file_name) = path.file_name() {
         if let Some(file_name_str) = file_name.to_str() {
-            return file_name_str.to_string();
+            file_name_str.to_string()
         } else {
-            return file_path;
+            file_path
         }
     } else {
-        return file_path;
+        file_path
     }
 }
