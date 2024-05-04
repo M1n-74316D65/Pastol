@@ -25,7 +25,7 @@ pastol [OPTIONS]
 - -h, --help: Print help.
 - -V, --version: Print version.
 
-## Build
+## Install
 
 ```sh
 # Install cargo
