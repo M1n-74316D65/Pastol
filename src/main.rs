@@ -34,7 +34,7 @@ struct Args {
     remove: Option<String>,
 
     /// WIP List all the publicly listed pastebins.
-    #[structopt(short, long, default_value = "true")]
+    #[structopt(short, long, default_value = "false")]
     list: bool,
 
     /// Set your username for the pastebin service.

@@ -1,4 +1,5 @@
 extern crate toml;
+use dirs::config_dir;
 use serde_derive::Deserialize; // Import Deserialize trait
 use std::fs::File;
 use std::io::{self, prelude::*};
@@ -13,7 +14,9 @@ pub struct Config {
 
 pub fn deserialized() -> io::Result<Config> {
     // Read the TOML string from the file
-    let mut file = File::open("config.toml")?;
+    let dir_path = config_dir().unwrap().join("omg.paste.cli");
+    let file_path = dir_path.join("config.toml");
+    let mut file = File::open(file_path)?;
     let mut toml_string = String::new();
     file.read_to_string(&mut toml_string)?;
 

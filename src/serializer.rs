@@ -1,4 +1,6 @@
+use dirs::config_dir;
 use serde_derive::Serialize;
+use std::fs;
 use std::fs::File;
 use std::io::{self, prelude::*};
 #[derive(Debug, Serialize)]
@@ -20,7 +22,10 @@ pub fn serialize(user: String, api_key: String, unlist: bool) -> io::Result<Conf
     let toml_string = toml::to_string(&config).unwrap();
 
     // Write the TOML string to a file
-    let mut file = File::create("config.toml")?;
+    let dir_path = config_dir().unwrap().join("omg.paste.cli");
+    fs::create_dir_all(&dir_path).expect("Failed to create directory");
+    let file_path = dir_path.join("config.toml");
+    let mut file = File::create(file_path)?;
     file.write_all(toml_string.as_bytes())?;
 
     Ok(config)
