@@ -1,18 +1,22 @@
-build:
+clean:
+  clear
+build: clean
   cargo build
-test:
+test: clean
   cargo test
-check:
+check: clean
   cargo clippy
-run-help: build
+run-help: build clean
   ./target/debug/pastol -h
-run-example: build
+run-example: build clean
   ./target/debug/pastol -t example -c "Example content."
-run-example-file: build
+run-example-file: build clean
   ./target/debug/pastol -f example.md
-run-example-no-title: build
+run-example-no-title: build clean
   ./target/debug/pastol -c example
-run-example-no-content: build
+run-example-no-content: build clean
   ./target/debug/pastol -t example
-run-exaple-remove: run-example
+run-exaple-remove: run-example clean
   ./target/debug/pastol -r example
+run-list: build clean
+  ./target/debug/pastol -l
