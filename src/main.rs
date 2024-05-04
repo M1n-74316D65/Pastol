@@ -71,25 +71,17 @@ fn run(args: Args, config: deserialize::Config) {
             config.user.clone(),
             config.api_key.clone(),
             args.remove.clone().unwrap(),
-        );
-        match result {
-            Ok(_config) => {
-                println!("Sucessfully removed {}", args.remove.unwrap());
-            }
-            Err(e) => {
-                eprintln!("Error loading config: {}", e);
-            }
+        )
+        .unwrap();
+        if result.status().is_success() {
+            println!("Result: {:?}", result);
         }
     // Download
     } else if args.download.is_some() {
-        let result = petitions::download(config.user.clone(), args.download.clone().unwrap());
-        match result {
-            Ok(_config) => {
-                println!("Sucessfully downloaded {}", args.download.unwrap());
-            }
-            Err(e) => {
-                eprintln!("Error loading config: {}", e);
-            }
+        let result =
+            petitions::download(config.user.clone(), args.download.clone().unwrap()).unwrap();
+        if result.status().is_success() {
+            println!("Result: {:?}", result);
         }
     // Info
     } else if args.info.is_some() {
@@ -97,25 +89,16 @@ fn run(args: Args, config: deserialize::Config) {
             config.user.clone(),
             config.api_key.clone(),
             args.info.clone().unwrap(),
-        );
-        match result {
-            Ok(_config) => {
-                println!("Info: {}", args.info.unwrap());
-            }
-            Err(e) => {
-                eprintln!("Error loading config: {}", e);
-            }
+        )
+        .unwrap();
+        if result.status().is_success() {
+            println!("Result: {:?}", result);
         }
     // List
     } else if args.list {
-        let result = petitions::list(config.user.clone(), config.api_key.clone());
-        match result {
-            Ok(_config) => {
-                println!("List: {}", args.list);
-            }
-            Err(e) => {
-                eprintln!("Error loading config: {}", e);
-            }
+        let result = petitions::list(config.user.clone(), config.api_key.clone()).unwrap();
+        if result.status().is_success() {
+            println!("Result: {:?}", result);
         }
     // Create a listed
     } else if !config.unlist {
