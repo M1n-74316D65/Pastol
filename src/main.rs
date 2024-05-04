@@ -119,7 +119,7 @@ fn run(args: Args, config: deserialize::Config) {
         }
     // Create a listed
     } else if !config.unlist {
-        petitions::create_listed(
+        let response = petitions::create_listed(
             config.user,
             config.api_key,
             if args.title.is_some() {
@@ -138,9 +138,15 @@ fn run(args: Args, config: deserialize::Config) {
             },
         )
         .unwrap();
-    // Create a unlisted
+        if response.status().is_success() {
+            println!("Sucessfully created pastebin");
+        }
+        // Wait for reply https://discourse.lol/t/feat-api-add-the-new-pastebin-url-in-the-response/960/1
+        // println!("Result: {:?}", response);
+
+        // Create a unlisted
     } else if config.unlist {
-        petitions::create_unlisted(
+        let response = petitions::create_unlisted(
             config.user,
             config.api_key,
             if args.title.is_some() {
@@ -159,6 +165,11 @@ fn run(args: Args, config: deserialize::Config) {
             },
         )
         .unwrap();
+        if response.status().is_success() {
+            println!("Sucessfully created pastebin");
+        }
+        // Wait for reply https://discourse.lol/t/feat-api-add-the-new-pastebin-url-in-the-response/960/1
+        // println!("Result: {:?}", response);
     }
 }
 

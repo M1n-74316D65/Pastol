@@ -1,24 +1,25 @@
 use std::collections::HashMap;
 
+use reqwest::Response;
+
 #[tokio::main]
 pub async fn create_unlisted(
     user: String,
     api_key: String,
     title: String,
     content: String,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<Response, Box<dyn std::error::Error>> {
     let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin/");
     let mut map = HashMap::new();
     map.insert("title", title);
     map.insert("content", content);
     let client = reqwest::Client::new();
-    client
+    Ok(client
         .post(url)
         .bearer_auth(api_key)
         .json(&map)
         .send()
-        .await?;
-    Ok(())
+        .await?)
 }
 
 #[tokio::main]
@@ -27,20 +28,19 @@ pub async fn create_listed(
     api_key: String,
     title: String,
     content: String,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<Response, Box<dyn std::error::Error>> {
     let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin/");
     let mut map = HashMap::new();
     map.insert("title", title);
     map.insert("content", content);
     map.insert("listed", "".to_string());
     let client = reqwest::Client::new();
-    client
+    Ok(client
         .post(url)
         .bearer_auth(api_key)
         .json(&map)
         .send()
-        .await?;
-    Ok(())
+        .await?)
 }
 
 #[tokio::main]
