@@ -1,7 +1,16 @@
 [package]
 name = "pastol"
 version = "0.8.0"
+authors = ["M1n-74316D65"]
 edition = "2021"
+description = "Paste.lol on the command line."
+readme = "README.md"
+homepage = "https://github.com/M1n-74316D65/Pastol"
+repository = "https://github.com/M1n-74316D65/Pastol"
+license = "MIT"
+license-file = "LICENSE"
+keywords = ["pastebin", "omg.lol", "paste.lol", "cli", "code"]
+categories = ["command-line-utilities", "command-line-interface"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
