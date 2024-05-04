@@ -1,4 +1,5 @@
 use clap::Parser;
+use rand::Rng;
 
 mod deserialize;
 mod file_reader;
@@ -48,6 +49,18 @@ struct Args {
     /// Set to true if you want newly created pastebins to be unlisted by default. (Default: false)
     #[structopt(long)]
     setunlist: Option<bool>,
+}
+
+fn generate_random_string(length: usize) -> String {
+    let mut rng = rand::thread_rng();
+    let charset: &[u8] = b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let random_string: String = (0..length)
+        .map(|_| {
+            let idx = rng.gen_range(0..charset.len());
+            charset[idx] as char
+        })
+        .collect();
+    random_string
 }
 
 fn run(args: Args, config: deserialize::Config) {
@@ -114,14 +127,14 @@ fn run(args: Args, config: deserialize::Config) {
             } else if args.file.is_some() {
                 file_reader::read_path(args.file.clone().unwrap())
             } else {
-                "no_title".to_string()
+                generate_random_string(15)
             },
             if args.content.is_some() {
                 args.content.unwrap().to_string()
             } else if args.file.is_some() {
                 file_reader::read_file(args.file.clone().unwrap()).unwrap()
             } else {
-                "no_content".to_string()
+                "".to_string()
             },
         )
         .unwrap();
@@ -135,14 +148,14 @@ fn run(args: Args, config: deserialize::Config) {
             } else if args.file.is_some() {
                 file_reader::read_path(args.file.clone().unwrap())
             } else {
-                "no_title".to_string()
+                generate_random_string(15)
             },
             if args.content.is_some() {
                 args.content.unwrap().to_string()
             } else if args.file.is_some() {
                 file_reader::read_file(args.file.clone().unwrap()).unwrap()
             } else {
-                "no_content".to_string()
+                "".to_string()
             },
         )
         .unwrap();

@@ -9,11 +9,11 @@ edition = "2021"
 reqwest = { version = "0.12", features = ["json"] }
 tokio = { version = "1", features = ["full"] }
 clap = { version = "4", features = ["derive"] }
-
-
-# reqwest Linux requirements
-openssl = { version = "0.10", features = ["vendored"] }
 toml = "0.8"
 serde_derive = "1"
 serde = "1"
 dirs = "5"
+rand = "0.8"
+
+# reqwest Linux requirements
+openssl = { version = "0.10", features = ["vendored"] }
