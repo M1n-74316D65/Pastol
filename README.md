@@ -67,6 +67,7 @@ pastol -t title-example -c "pastebin content example"
 
 # Remove a pastebin
 pastol -r hello-world
+# For more info check the justfile or use just.
 ```
 
 ## Build
