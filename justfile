@@ -14,3 +14,5 @@ run-example-no-title: build
   ./target/debug/pastol -c example
 run-example-no-content: build
   ./target/debug/pastol -t example
+run-exaple-remove: run-example
+  ./target/debug/pastol -r example
