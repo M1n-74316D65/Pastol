@@ -79,3 +79,7 @@ cargo build
 
 # For more info check the justfile or use just.
 ```
+
+
+
+[Don't you dare.](https://reply.cards/hskmnxkfpv)
