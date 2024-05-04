@@ -1,4 +1,4 @@
-All the options that retrive something from the API are WIP.
+Information, download, and list are still being worked on.
 
 # Paste.lol Unofficial Command Line Interface (CLI)
 
