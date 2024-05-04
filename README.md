@@ -1,3 +1,5 @@
+All the option that retrive something from the API are WIP.
+
 # Paste.lol Command Line Interface (CLI)
 
 Paste.lol CLI tool enables users to interact with Paste.lol service directly from the command line. Paste.lol allows you to share text and files quickly and conveniently.
