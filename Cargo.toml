@@ -8,7 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/M1n-74316D65/Pastol"
 repository = "https://github.com/M1n-74316D65/Pastol"
 license = "MIT"
-keywords = ["pastebin", "omg.lol", "paste.lol", "cli", "code"]
+keywords = ["pastebin", "markdown ", "pastelol", "cli", "filesharing"]
 categories = ["command-line-utilities", "command-line-interface"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
