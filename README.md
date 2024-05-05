@@ -1,6 +1,4 @@
-Download is still being worked on. Info and list work, but need visual improvements.
-
-# Paste.lol Unofficial Command Line Interface (CLI)
+# [Paste.lol](https://reply.cards/hskmnxkfpv) Unofficial Command Line Interface (CLI)
 
 Pastol enables users to interact with Paste.lol service directly from the command line. Pastol allows you to share text and files quickly and conveniently from the CL.
 
@@ -15,7 +13,7 @@ pastol [OPTIONS]
 - -f, --file <FILE>: Upload a file or update an existing file on the pastebin.
 - -t, --title <TITLE>: Title of the new pastebin or the title of the pastebin to update.
 - -c, --content <CONTENT>: Content of the new pastebin or the content of the pastebin to update.
-- --download <DOWNLOAD>: WIP Download the content of a pastebin.
+- -d, --download <DOWNLOAD>: WIP Download the content of a pastebin.
 - -i, --info <INFO>: Get detailed information about a pastebin.
 - -r, --remove <REMOVE>: Remove a pastebin from the pastebin service.
 - -l, --list: List all the publicly listed pastebins.
@@ -27,57 +25,113 @@ pastol [OPTIONS]
 
 ## Install
 
-```sh
-# Install rust and cargo
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+1.  Install rust and cargo.
 
-# Install the crate
-cargo install pastol
-```
+    ```sh
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+
+2.  Install the crate.
+    ```sh
+    cargo install pastol
+    ```
 
 ## Setup
 
-```sh
-# Set user and API key
-pastol --setuser your_username --setapikey your_api_key
+1.  Set user and API key.
+    ```sh
+    pastol --setuser your_username --setapikey your_api_key
+    ```
+2.  Exampe as adam.
+    ```sh
+    pastel --setuser adam --setapikey a321dwageaawdwadw
+    ```
 
-# Exampe 2
-pastel --setuser adam --setapikey a321dwageaawdwadw
-```
+- OPTIONAL: Set all the new or updated pastebin to unlisted/hidden.
+  ```sh
+  pastol --setunlist true
+  ```
 
-## Example
+## Examples
 
-```sh
-# Upload a file
-pastol -f example.txt
+- Upload a file.
 
-# Upload a file with custom title
-pastol -f example.txt -t "Example Title"
+  ```sh
+  pastol -f example.txt
+  ```
 
-# Upload a file with custom content
-pastol -f example.txt -c "This is the content of the example file."
+- Download a pastebin as a file.
 
-# Upload a custom
-pastol -t title-example -c "pastebin content example"
+  ```sh
+  pastol -d example-title-as-apears-on-the-url
+  ```
 
-# Remove a pastebin
-pastol -r hello-world
-# For more info check the justfile or use just.
-```
+- Upload a file with custom title.
+
+  ```sh
+  pastol -f example.txt -t "Example Title"
+  ```
+
+- Upload a file with custom content.
+
+  ```sh
+  pastol -f example.txt -c "This is the content of the example file."
+  ```
+
+- Upload a custom.
+
+  ```sh
+  pastol -t title-example -c "pastebin content example"
+  ```
+
+- Remove a pastebin.
+
+  ```sh
+  pastol -r hello-world
+  ```
+
+- List all listed(non hiden) pastebins.
+
+  ```sh
+  pastol -l
+  ```
+
+- Get all the info of a pastebin.
+
+  ```sh
+  pastol -i example
+  ```
 
 ## Build
 
-```sh
-# Install cargo
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+Please use [just](https://just.systems/).
 
-# Clone the repo
-git clone https://github.com/M1n-74316D65/Pastol
+else:
 
-# Build the crate
-cargo build
+1. Install cargo
 
-# For more info check the justfile or use just.
-```
+   ```sh
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
 
-[Don't you dare.](https://reply.cards/hskmnxkfpv)
+2. Clone the repo
+
+   ```sh
+   git clone https://github.com/M1n-74316D65/Pastol
+   ```
+
+3. Build
+
+   - Using [just](https://just.systems/). (use this pls)
+     1. Install just if not installed
+     2. check the justfile to see available commands.
+   - Using cargo
+     1. ```sh
+        cargo build
+        ```
+     2. This is the path of the pastol executable:
+        ```sh
+        ./target/debug/pastol
+        ```
+
+For more info check the [justfile](https://github.com/M1n-74316D65/Pastol/blob/master/justfile) or use just.
