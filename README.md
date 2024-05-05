@@ -1,6 +1,6 @@
-# [Paste.lol](https://reply.cards/hskmnxkfpv) Unofficial Command Line Interface (CLI)
+# [Paste.lol](https://paste.lol/) Unofficial Command Line Interface (CLI)
 
-Pastol enables users to interact with Paste.lol service directly from the command line. Pastol allows you to share text and files quickly and conveniently from the CL.
+[Pastol](https://reply.cards/hskmnxkfpv) enables users to interact with Paste.lol service directly from the command line. Pastol allows you to share text and files quickly and conveniently from the CL.
 
 ## Usage
 
