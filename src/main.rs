@@ -95,7 +95,12 @@ fn run(args: Args, config: deserializer::Config) {
         );
         match result {
             Ok(result) => {
-                println!("Title: {}", result["response"]["paste"]["title"]);
+                println!();
+                println!("--------------------------------------------------");
+                println!(
+                    "Title: {}",
+                    result["response"]["paste"]["title"].as_str().unwrap()
+                );
                 println!(
                     "Modified on: {}",
                     chrono::DateTime::<chrono::Utc>::from(
@@ -109,7 +114,10 @@ fn run(args: Args, config: deserializer::Config) {
                     println!("Listed");
                 }
                 println!("Content:");
-                println!("{}", result["response"]["paste"]["content"]);
+                println!(
+                    "{}",
+                    result["response"]["paste"]["content"].as_str().unwrap()
+                );
             }
             Err(error) => {
                 println!("Error: {:?}", error);
@@ -126,9 +134,13 @@ fn run(args: Args, config: deserializer::Config) {
                     if i != 0 {
                         println!();
                         println!();
-                        println!("Number: {}", i);
+                        println!("--------------------------------------------------");
+                        // println!("Number: {}", i);
                     }
-                    println!("Title: {}", result["response"]["pastebin"][i]["title"]);
+                    println!(
+                        "Title: {}",
+                        result["response"]["pastebin"][i]["title"].as_str().unwrap()
+                    );
                     println!(
                         "Modified on: {}",
                         chrono::DateTime::<chrono::Utc>::from(
@@ -142,7 +154,12 @@ fn run(args: Args, config: deserializer::Config) {
                     );
                     println!("Content: ");
                     println!();
-                    println!("{}", result["response"]["pastebin"][i]["content"]);
+                    println!(
+                        "{}",
+                        result["response"]["pastebin"][i]["content"]
+                            .as_str()
+                            .unwrap()
+                    );
                 }
             }
             Err(error) => {
