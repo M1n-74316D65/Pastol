@@ -115,7 +115,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         match result {
             Ok(result) => {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
-                    for i in 0..result["response"]["pastebin"].as_array().unwrap().len() {
+                    for i in (0..result["response"]["pastebin"].as_array().unwrap().len()).rev() {
                         if i != 0 {
                             println!();
                             println!();
