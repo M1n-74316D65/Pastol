@@ -47,7 +47,7 @@ struct Args {
     #[structopt(long)]
     setapikey: Option<String>,
 
-    /// Set to true if you want newly created pastebins to be unlisted by default. (Default: false)
+    /// If true unlisted by default. (Default: false)
     #[structopt(long)]
     setunlist: Option<bool>,
 }
