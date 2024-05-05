@@ -30,14 +30,10 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         );
         match result {
             Ok(result) => {
-                if result["request"]["status_code"].as_i64().unwrap() == 200 {
                     println!("{}", result["response"]["message"].as_str().unwrap());
-                } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
-                }
             }
             Err(error) => {
-                println!("Error: {}", error.to_string());
+                println!("Error: {}", error);
             }
         }
 
