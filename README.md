@@ -104,10 +104,6 @@ pastol [OPTIONS]
 
 ## Build
 
-Please use [just](https://just.systems/).
-
-else:
-
 1. Install cargo
 
    ```sh
