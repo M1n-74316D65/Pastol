@@ -18,7 +18,7 @@ pub fn serialize(user: String, api_key: String, unlist: bool) -> io::Result<Conf
 
     let toml_string = toml::to_string(&config).unwrap();
 
-    let dir_path = config_dir().unwrap().join("omg.paste.cli");
+    let dir_path = config_dir().unwrap().join("pastol");
     fs::create_dir_all(&dir_path).expect("Failed to create directory");
     let file_path = dir_path.join("config.toml");
     let mut file = File::create(file_path)?;

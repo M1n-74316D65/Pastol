@@ -1,6 +1,6 @@
 [package]
 name = "pastol"
-version = "0.9.1"
+version = "1.0.0"
 authors = ["M1n-74316D65"]
 edition = "2021"
 description = "Paste.lol on the command line."

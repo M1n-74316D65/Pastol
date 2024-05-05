@@ -13,7 +13,7 @@ pub struct Config {
 
 pub fn deserialized() -> io::Result<Config> {
     // Read the TOML string from the file
-    let dir_path = config_dir().unwrap().join("omg.paste.cli");
+    let dir_path = config_dir().unwrap().join("pastol");
     let file_path = dir_path.join("config.toml");
     let mut file = File::open(file_path)?;
     let mut toml_string = String::new();
