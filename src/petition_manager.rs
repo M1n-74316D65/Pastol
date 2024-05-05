@@ -206,7 +206,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
 
         // Create a unlisted
     } else if config.unlist {
-        let response = petitions::create_unlisted(
+        let result = petitions::create_unlisted(
             config.user,
             config.api_key,
             if args.title.is_some() {
@@ -223,12 +223,33 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
             } else {
                 "".to_string()
             },
-        )
-        .unwrap();
-        if response.status().is_success() {
-            println!("Sucessfully created pastebin");
-        }
-        // Wait for reply https://discourse.lol/t/feat-api-add-the-new-pastebin-url-in-the-response/960/1
-        // println!("Result: {:?}", response);
+        );
+        match result {
+            Ok(result) => {
+                if result["request"]["status_code"].as_i64().unwrap() == 200 {
+                    println!(
+                        "{}",
+                        // Remove all html tags
+                        Regex::new(r#"<a[^>]*\bhref="([^"]*)"[^>]*>.*?</a>"#)
+                            .unwrap()
+                            .replace_all(
+                                result["response"]["message"].as_str().unwrap(),
+                                |caps: &regex::Captures<'_>| -> String {
+                                    if let Some(m) = caps.get(1) {
+                                        m.as_str().to_string()
+                                    } else {
+                                        String::new()
+                                    }
+                                },
+                            )
+                    );
+                } else {
+                    println!("{}", result["response"]["message"].as_str().unwrap());
+                }
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+            }
+        };
     }
 }
