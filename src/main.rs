@@ -1,10 +1,8 @@
 use clap::Parser;
-use rand::Rng;
-use std::time::{Duration, UNIX_EPOCH};
-use write_markdown::write_markdown;
 
 mod deserializer;
 mod file_reader;
+mod petition_manager;
 mod petitions;
 mod serializer;
 mod write_markdown;
@@ -25,11 +23,11 @@ struct Args {
     #[structopt(short, long)]
     content: Option<String>,
 
-    /// WIP Download the content of a pastebin .
-    #[structopt(long)]
+    /// Download the content of a pastebin .
+    #[structopt(short, long)]
     download: Option<String>,
 
-    /// WIP Get detailed information about a pastebin.
+    /// Get detailed information about a pastebin.
     #[structopt(short, long)]
     info: Option<String>,
 
@@ -37,7 +35,7 @@ struct Args {
     #[structopt(short, long)]
     remove: Option<String>,
 
-    /// WIP List all the publicly listed pastebins.
+    /// List all the publicly listed pastebins.
     #[structopt(short, long, default_value = "false")]
     list: bool,
 
@@ -52,194 +50,6 @@ struct Args {
     /// Set to true if you want newly created pastebins to be unlisted by default. (Default: false)
     #[structopt(long)]
     setunlist: Option<bool>,
-}
-
-fn generate_random_string(length: usize) -> String {
-    let mut rng = rand::thread_rng();
-    let charset: &[u8] = b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let random_string: String = (0..length)
-        .map(|_| {
-            let idx = rng.gen_range(0..charset.len());
-            charset[idx] as char
-        })
-        .collect();
-    random_string
-}
-
-fn run(args: Args, config: deserializer::Config) {
-    // println!("run");
-    // Remove
-    if args.remove.is_some() {
-        let result = petitions::remove(
-            config.user.clone(),
-            config.api_key.clone(),
-            args.remove.clone().unwrap(),
-        )
-        .unwrap();
-        if result.status().is_success() {
-            println!("Result: {:?}", result);
-        }
-    // TODO
-    // Download
-    } else if args.download.is_some() {
-        let result = petitions::download(config.user.clone(), args.download.clone().unwrap());
-        match result {
-            Ok(result) => {
-                write_markdown(
-                    result["response"]["paste"]["title"]
-                        .as_str()
-                        .unwrap()
-                        .to_string(),
-                    // "# ".to_string()
-                    //     + result["response"]["paste"]["title"].as_str().unwrap()
-                    //     + "\n\n"
-                    //     + result["response"]["paste"]["content"].as_str().unwrap(),
-                    result["response"]["paste"]["content"]
-                        .as_str()
-                        .unwrap()
-                        .to_string(),
-                );
-            }
-            Err(error) => {
-                println!("Error: {:?}", error);
-            }
-        }
-
-    // Info
-    } else if args.info.is_some() {
-        let result = petitions::show(
-            config.user.clone(),
-            config.api_key.clone(),
-            args.info.clone().unwrap(),
-        );
-        match result {
-            Ok(result) => {
-                println!();
-                println!("--------------------------------------------------");
-                println!(
-                    "Title: {}",
-                    result["response"]["paste"]["title"].as_str().unwrap()
-                );
-                println!(
-                    "Modified on: {}",
-                    chrono::DateTime::<chrono::Utc>::from(
-                        UNIX_EPOCH
-                            + Duration::from_secs(
-                                result["response"]["paste"]["modified_on"].as_u64().unwrap()
-                            )
-                    )
-                );
-                if result["response"]["paste"]["listed"] == 1 {
-                    println!("Listed");
-                }
-                println!("Content:");
-                println!(
-                    "{}",
-                    result["response"]["paste"]["content"].as_str().unwrap()
-                );
-            }
-            Err(error) => {
-                println!("Error: {:?}", error);
-            }
-        }
-
-    // TODO: Improve the content printing
-    // List
-    } else if args.list {
-        let result = petitions::list(config.user.clone());
-        match result {
-            Ok(result) => {
-                for i in 0..result["response"]["pastebin"].as_array().unwrap().len() {
-                    if i != 0 {
-                        println!();
-                        println!();
-                        println!("--------------------------------------------------");
-                        // println!("Number: {}", i);
-                    }
-                    println!(
-                        "Title: {}",
-                        result["response"]["pastebin"][i]["title"].as_str().unwrap()
-                    );
-                    println!(
-                        "Modified on: {}",
-                        chrono::DateTime::<chrono::Utc>::from(
-                            UNIX_EPOCH
-                                + Duration::from_secs(
-                                    result["response"]["pastebin"][i]["modified_on"]
-                                        .as_u64()
-                                        .unwrap()
-                                )
-                        )
-                    );
-                    println!("Content: ");
-                    println!();
-                    println!(
-                        "{}",
-                        result["response"]["pastebin"][i]["content"]
-                            .as_str()
-                            .unwrap()
-                    );
-                }
-            }
-            Err(error) => {
-                println!("Error: {:?}", error);
-            }
-        }
-
-        // Create a listed
-    } else if !config.unlist {
-        let response = petitions::create_listed(
-            config.user,
-            config.api_key,
-            if args.title.is_some() {
-                args.title.unwrap().to_string()
-            } else if args.file.is_some() {
-                file_reader::read_path(args.file.clone().unwrap())
-            } else {
-                generate_random_string(15)
-            },
-            if args.content.is_some() {
-                args.content.unwrap().to_string()
-            } else if args.file.is_some() {
-                file_reader::read_file(args.file.clone().unwrap()).unwrap()
-            } else {
-                "".to_string()
-            },
-        )
-        .unwrap();
-        if response.status().is_success() {
-            println!("Sucessfully created pastebin");
-        }
-        // Wait for reply https://discourse.lol/t/feat-api-add-the-new-pastebin-url-in-the-response/960/1
-        // println!("Result: {:?}", response);
-
-        // Create a unlisted
-    } else if config.unlist {
-        let response = petitions::create_unlisted(
-            config.user,
-            config.api_key,
-            if args.title.is_some() {
-                args.title.unwrap().to_string()
-            } else if args.file.is_some() {
-                file_reader::read_path(args.file.clone().unwrap())
-            } else {
-                generate_random_string(15)
-            },
-            if args.content.is_some() {
-                args.content.unwrap().to_string()
-            } else if args.file.is_some() {
-                file_reader::read_file(args.file.clone().unwrap()).unwrap()
-            } else {
-                "".to_string()
-            },
-        )
-        .unwrap();
-        if response.status().is_success() {
-            println!("Sucessfully created pastebin");
-        }
-        // Wait for reply https://discourse.lol/t/feat-api-add-the-new-pastebin-url-in-the-response/960/1
-        // println!("Result: {:?}", response);
-    }
 }
 
 fn serialize(user: String, api_key: String, unlist: bool, output: String) {
@@ -287,14 +97,14 @@ fn check_user_and_api(args: Args, config: deserializer::Config) {
         let result = deserializer::deserialized();
         match result {
             Ok(config) => {
-                run(args, config);
+                petition_manager::petition_manager(args, config);
             }
 
             // First run
             Err(_e) => {}
         }
     } else {
-        run(args, config);
+        petition_manager::petition_manager(args, config);
     }
 }
 

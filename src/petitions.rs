@@ -48,15 +48,17 @@ pub async fn remove(
     user: String,
     api_key: String,
     title_as_url: String,
-) -> Result<Response, Box<dyn std::error::Error>> {
+) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
     let url = format!(
         "{}{}{}{}",
         "https://api.omg.lol/address/", user, "/pastebin/", title_as_url
     );
-    let client = reqwest::Client::new()
+    let client: serde_json::Value = reqwest::Client::new()
         .delete(url)
         .bearer_auth(api_key)
         .send()
+        .await?
+        .json()
         .await?;
     Ok(client)
 }
