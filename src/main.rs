@@ -1,11 +1,13 @@
 use clap::Parser;
 use rand::Rng;
 use std::time::{Duration, UNIX_EPOCH};
+use write_markdown::write_markdown;
 
 mod deserializer;
 mod file_reader;
 mod petitions;
 mod serializer;
+mod write_markdown;
 
 /// Paste.lol on the command line (cant list unlisted, only target unlisted).
 #[derive(Parser, Debug)]
@@ -80,10 +82,27 @@ fn run(args: Args, config: deserializer::Config) {
     // TODO
     // Download
     } else if args.download.is_some() {
-        let result =
-            petitions::download(config.user.clone(), args.download.clone().unwrap()).unwrap();
-        if result.status().is_success() {
-            println!("Result: {:?}", result);
+        let result = petitions::download(config.user.clone(), args.download.clone().unwrap());
+        match result {
+            Ok(result) => {
+                write_markdown(
+                    result["response"]["paste"]["title"]
+                        .as_str()
+                        .unwrap()
+                        .to_string(),
+                    // "# ".to_string()
+                    //     + result["response"]["paste"]["title"].as_str().unwrap()
+                    //     + "\n\n"
+                    //     + result["response"]["paste"]["content"].as_str().unwrap(),
+                    result["response"]["paste"]["content"]
+                        .as_str()
+                        .unwrap()
+                        .to_string(),
+                );
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+            }
         }
 
     // Info

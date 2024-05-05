@@ -65,12 +65,12 @@ pub async fn remove(
 pub async fn download(
     user: String,
     title_as_url: String,
-) -> Result<Response, Box<dyn std::error::Error>> {
+) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
     let url = format!(
         "{}{}{}{}",
         "https://api.omg.lol/address/", user, "/pastebin/", title_as_url
     );
-    let client = reqwest::Client::new().get(url).send().await?;
+    let client: serde_json::Value = reqwest::Client::new().get(url).send().await?.json().await?;
     Ok(client)
 }
 
