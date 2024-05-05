@@ -1,5 +1,6 @@
 use clap::Parser;
 use rand::Rng;
+use std::time::{Duration, UNIX_EPOCH};
 
 mod deserialize;
 mod file_reader;
@@ -76,6 +77,7 @@ fn run(args: Args, config: deserialize::Config) {
         if result.status().is_success() {
             println!("Result: {:?}", result);
         }
+    // TODO
     // Download
     } else if args.download.is_some() {
         let result =
@@ -83,24 +85,72 @@ fn run(args: Args, config: deserialize::Config) {
         if result.status().is_success() {
             println!("Result: {:?}", result);
         }
+
     // Info
     } else if args.info.is_some() {
         let result = petitions::show(
             config.user.clone(),
             config.api_key.clone(),
             args.info.clone().unwrap(),
-        )
-        .unwrap();
-        if result.status().is_success() {
-            println!("Result: {:?}", result);
+        );
+        match result {
+            Ok(result) => {
+                println!("Title: {}", result["response"]["paste"]["title"]);
+                println!(
+                    "Modified on: {}",
+                    chrono::DateTime::<chrono::Utc>::from(
+                        UNIX_EPOCH
+                            + Duration::from_secs(
+                                result["response"]["paste"]["modified_on"].as_u64().unwrap()
+                            )
+                    )
+                );
+                if result["response"]["paste"]["listed"] == 1 {
+                    println!("Listed");
+                }
+                println!("Content:");
+                println!("{}", result["response"]["paste"]["content"]);
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+            }
         }
+
+    // TODO: Improve the content printing
     // List
     } else if args.list {
-        let result = petitions::list(config.user.clone(), config.api_key.clone()).unwrap();
-        if result.status().is_success() {
-            println!("Result: {:?}", result);
+        let result = petitions::list(config.user.clone());
+        match result {
+            Ok(result) => {
+                for i in 0..result["response"]["pastebin"].as_array().unwrap().len() {
+                    if i != 0 {
+                        println!();
+                        println!();
+                        println!("Number: {}", i);
+                    }
+                    println!("Title: {}", result["response"]["pastebin"][i]["title"]);
+                    println!(
+                        "Modified on: {}",
+                        chrono::DateTime::<chrono::Utc>::from(
+                            UNIX_EPOCH
+                                + Duration::from_secs(
+                                    result["response"]["pastebin"][i]["modified_on"]
+                                        .as_u64()
+                                        .unwrap()
+                                )
+                        )
+                    );
+                    println!("Content: ");
+                    println!();
+                    println!("{}", result["response"]["pastebin"][i]["content"]);
+                }
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+            }
         }
-    // Create a listed
+
+        // Create a listed
     } else if !config.unlist {
         let response = petitions::create_listed(
             config.user,
@@ -187,6 +237,7 @@ fn check_user_and_api(args: Args, config: deserialize::Config) {
             } else {
                 config.unlist
             },
+            // TODO: Make all the possible options
             if args.setuser.is_some() && args.setapikey.is_some() {
                 "User and api".to_string()
             } else if args.setapikey.is_some() {
@@ -233,7 +284,6 @@ fn main() {
                     check_user_and_api(args, config);
                 }
 
-                // First run
                 Err(_e) => {}
             }
         }

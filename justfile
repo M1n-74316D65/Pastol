@@ -22,3 +22,5 @@ run-exaple-remove: run-example clean
   ./target/debug/pastol -r example
 run-list: build clean
   ./target/debug/pastol --list
+run-info: build clean
+  ./target/debug/pastol --info example

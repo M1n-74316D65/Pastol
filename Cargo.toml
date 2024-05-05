@@ -19,9 +19,11 @@ tokio = { version = "1", features = ["full"] }
 clap = { version = "4", features = ["derive"] }
 toml = "0.8"
 serde_derive = "1"
+serde_json = "1"
 serde = "1"
 dirs = "5"
 rand = "0.8"
+chrono = "0.4"
 
 # reqwest Linux requirements
 openssl = { version = "0.10", features = ["vendored"] }

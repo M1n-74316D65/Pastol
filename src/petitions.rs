@@ -79,26 +79,24 @@ pub async fn show(
     user: String,
     api_key: String,
     title_as_url: String,
-) -> Result<Response, Box<dyn std::error::Error>> {
+) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
     let url = format!(
         "{}{}{}{}",
         "https://api.omg.lol/address/", user, "/pastebin/", title_as_url
     );
-    let client = reqwest::Client::new()
+    let client: serde_json::Value = reqwest::Client::new()
         .get(url)
         .bearer_auth(api_key)
         .send()
+        .await?
+        .json()
         .await?;
     Ok(client)
 }
 
 #[tokio::main]
-pub async fn list(user: String, api_key: String) -> Result<Response, Box<dyn std::error::Error>> {
-    let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin/");
-    let client = reqwest::Client::new()
-        .get(url)
-        .bearer_auth(api_key)
-        .send()
-        .await?;
+pub async fn list(user: String) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
+    let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin");
+    let client: serde_json::Value = reqwest::Client::new().get(url).send().await?.json().await?;
     Ok(client)
 }
