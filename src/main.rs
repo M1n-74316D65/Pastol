@@ -28,7 +28,7 @@ struct Args {
     download: Option<String>,
 
     /// WIP Get detailed information about a pastebin.
-    #[structopt(long)]
+    #[structopt(short, long)]
     info: Option<String>,
 
     /// Remove a pastebin from the pastebin service.
@@ -36,7 +36,7 @@ struct Args {
     remove: Option<String>,
 
     /// WIP List all the publicly listed pastebins.
-    #[structopt(long, default_value = "false")]
+    #[structopt(short, long, default_value = "false")]
     list: bool,
 
     /// Set your username for the pastebin service.
