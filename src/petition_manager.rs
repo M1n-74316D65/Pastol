@@ -30,7 +30,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         );
         match result {
             Ok(result) => {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                println!("{}", result["response"]["message"].as_str().unwrap());
             }
             Err(error) => {
                 println!("Error: {}", error);
