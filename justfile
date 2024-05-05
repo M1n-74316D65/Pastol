@@ -22,9 +22,17 @@ run-example-no-content: build clean
   ./target/debug/pastol -t example
 run-exaple-remove: run-example clean
   ./target/debug/pastol -r example
+run-exaple-remove-fail: build clean
+  ./target/debug/pastol -r exampledwadawdas
 run-list: build clean
+  ./target/debug/pastol --list
+run-list-fail: build clean
   ./target/debug/pastol --list
 run-info: build clean
   ./target/debug/pastol --info sign-git-commits-with-gpg-in-fish-shell
+run-info-fail: build clean
+  ./target/debug/pastol --info sign-git-commits-with-gpg-in-fish-shelldwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
 run-download: build clean
   ./target/debug/pastol --download sign-git-commits-with-gpg-in-fish-shell
+run-download-fail: build clean
+  ./target/debug/pastol --download sign-git-commits-with-gpg-in-fish-shelldwadwwwwwwwwwwwwwwwwwwwwwww
