@@ -2,7 +2,7 @@
 name: "✨ Feature request"
 about: Suggest an idea for this project
 title: ''
-labels: "✨ enhancement"
+labels: "✨ enhancement, \U0001F50D️ question"
 assignees: ''
 
 ---
