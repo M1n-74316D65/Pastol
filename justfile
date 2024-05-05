@@ -23,4 +23,4 @@ run-exaple-remove: run-example clean
 run-list: build clean
   ./target/debug/pastol --list
 run-info: build clean
-  ./target/debug/pastol --info example
+  ./target/debug/pastol --info sign-git-commits-with-gpg-in-fish-shell
