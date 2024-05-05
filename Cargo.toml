@@ -1,6 +1,6 @@
 [package]
 name = "pastol"
-version = "0.8.1"
+version = "0.9.0"
 authors = ["M1n-74316D65"]
 edition = "2021"
 description = "Paste.lol on the command line."
@@ -25,6 +25,7 @@ dirs = "5"
 rand = "0.8"
 chrono = "0.4"
 markdown = "0.3"
+regex = "1.10.4"
 
 # reqwest Linux requirements
 openssl = { version = "0.10", features = ["vendored"] }
