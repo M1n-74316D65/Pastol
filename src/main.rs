@@ -2,7 +2,7 @@ use clap::Parser;
 use rand::Rng;
 use std::time::{Duration, UNIX_EPOCH};
 
-mod deserialize;
+mod deserializer;
 mod file_reader;
 mod petitions;
 mod serializer;
@@ -64,7 +64,7 @@ fn generate_random_string(length: usize) -> String {
     random_string
 }
 
-fn run(args: Args, config: deserialize::Config) {
+fn run(args: Args, config: deserializer::Config) {
     // println!("run");
     // Remove
     if args.remove.is_some() {
@@ -218,7 +218,7 @@ fn serialize(user: String, api_key: String, unlist: bool, output: String) {
     }
 }
 
-fn check_user_and_api(args: Args, config: deserialize::Config) {
+fn check_user_and_api(args: Args, config: deserializer::Config) {
     // println!("check_user_and_api");
     if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
         serialize(
@@ -248,7 +248,7 @@ fn check_user_and_api(args: Args, config: deserialize::Config) {
                 "Unlist".to_string()
             },
         );
-        let result = deserialize::deserialized();
+        let result = deserializer::deserialized();
         match result {
             Ok(config) => {
                 run(args, config);
@@ -264,7 +264,7 @@ fn check_user_and_api(args: Args, config: deserialize::Config) {
 
 fn main() {
     let args = Args::parse();
-    let result = deserialize::deserialized();
+    let result = deserializer::deserialized();
     match result {
         Ok(config) => {
             check_user_and_api(args, config);
@@ -278,7 +278,7 @@ fn main() {
                 false,
                 "First run!".to_string(),
             );
-            let result = deserialize::deserialized();
+            let result = deserializer::deserialized();
             match result {
                 Ok(config) => {
                     check_user_and_api(args, config);
