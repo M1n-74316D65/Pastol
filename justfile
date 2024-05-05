@@ -4,8 +4,10 @@ build: clean
   cargo build
 test: clean
   cargo test
-check: clean
+clippy: clean
   cargo clippy
+check: clean
+  cargo check
 install: clean
   cargo install --path .
 run-help: build clean
@@ -24,3 +26,5 @@ run-list: build clean
   ./target/debug/pastol --list
 run-info: build clean
   ./target/debug/pastol --info sign-git-commits-with-gpg-in-fish-shell
+run-download: build clean
+  ./target/debug/pastol --download sign-git-commits-with-gpg-in-fish-shell
