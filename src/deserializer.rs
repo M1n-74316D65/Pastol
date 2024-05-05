@@ -1,12 +1,11 @@
 extern crate toml;
 use dirs::config_dir;
-use serde_derive::Deserialize; // Import Deserialize trait
+use serde_derive::Deserialize;
 use std::fs::File;
 use std::io::{self, prelude::*};
 // Define a struct to hold your configuration
-#[derive(Debug, Deserialize)] // Derive Deserialize trait
+#[derive(Debug, Deserialize)]
 pub struct Config {
-    // Define your configuration fields
     pub user: String,
     pub api_key: String,
     pub unlist: bool,

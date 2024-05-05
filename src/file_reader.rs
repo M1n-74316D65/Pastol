@@ -3,13 +3,11 @@ use std::io::{self, BufRead, BufReader};
 use std::path::Path;
 
 pub fn read_file(filename: String) -> io::Result<String> {
-    // Open the file
     let file = File::open(filename)?;
     let reader = BufReader::new(file);
 
     let mut content = String::new();
 
-    // Read the file line by line
     for line in reader.lines() {
         content.push_str(&line?);
     }
