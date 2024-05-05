@@ -25,6 +25,7 @@ dirs = "5"
 rand = "0.8"
 chrono = "0.4"
 markdown = "0.3"
+regex = "1.10.4"
 
 # reqwest Linux requirements
 openssl = { version = "0.10", features = ["vendored"] }
