@@ -108,7 +108,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
             }
         }
 
-    // List
+    // List pastebins
     } else if args.list {
         let result = petitions::list(config.user.clone());
         match result {
@@ -157,7 +157,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
 
         // Create a listed
     } else if !config.unlist {
-        let response = petitions::create_listed(
+        let result = petitions::create_listed(
             config.user,
             config.api_key,
             if args.title.is_some() {
@@ -174,10 +174,18 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
             } else {
                 "".to_string()
             },
-        )
-        .unwrap();
-        if response.status().is_success() {
-            println!("Sucessfully created pastebin");
+        );
+        match result {
+            Ok(result) => {
+                if result["request"]["status_code"].as_i64().unwrap() == 200 {
+                    println!("{}", result["response"]["message"].as_str().unwrap());
+                } else {
+                    println!("{}", result["response"]["message"].as_str().unwrap());
+                }
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+            }
         }
         // Wait for reply https://discourse.lol/t/feat-api-add-the-new-pastebin-url-in-the-response/960/1
         // println!("Result: {:?}", response);
