@@ -94,15 +94,6 @@ fn check_user_and_api(args: Args, config: deserializer::Config) {
                 "Unlist".to_string()
             },
         );
-        let result = deserializer::deserialized();
-        match result {
-            Ok(config) => {
-                petition_manager::petition_manager(args, config);
-            }
-
-            // First run
-            Err(_e) => {}
-        }
     } else {
         petition_manager::petition_manager(args, config);
     }
