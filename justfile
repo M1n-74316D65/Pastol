@@ -16,7 +16,7 @@ run-listed-true: build clean
   ./target/debug/pastol --setunlist true
 run-listed-false: build clean
   ./target/debug/pastol --setunlist false
-run-example: build clean
+run-example: download clean
   ./target/debug/pastol -t example -c "Example content."
 run-example-file: build clean
   ./target/debug/pastol -f example.md
@@ -32,11 +32,11 @@ run-list: build clean
   ./target/debug/pastol --list
 run-list-fail: build clean
   ./target/debug/pastol --list
-run-info: build clean
-  ./target/debug/pastol --info sign-git-commits-with-gpg-in-fish-shell
+run-info: run-example clean
+  ./target/debug/pastol --info example
 run-info-fail: build clean
-  ./target/debug/pastol --info sign-git-commits-with-gpg-in-fish-shelldwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-run-download: build clean
-  ./target/debug/pastol --download sign-git-commits-with-gpg-in-fish-shell
+  ./target/debug/pastol --info qZ5pR9KcX7dA2eW3
+run-download: run-example clean
+  ./target/debug/pastol --download example
 run-download-fail: build clean
-  ./target/debug/pastol --download sign-git-commits-with-gpg-in-fish-shelldwadwwwwwwwwwwwwwwwwwwwwwww
+  ./target/debug/pastol --download qZ5pR9KcX7dA2eW3
