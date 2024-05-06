@@ -172,7 +172,7 @@ pastol [FILE] [OPTIONS]
   pastol -r hello-world
   ```
 
-- List all listed(non hiden) pastebins.
+- List all listed pastebins.
 
   ```sh
   pastol -l
