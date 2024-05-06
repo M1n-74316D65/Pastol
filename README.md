@@ -31,7 +31,39 @@ pastol [OPTIONS]
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     ```
 
-2.  Install the crate.
+2.  If on **Linux** install:
+
+    - Arch Linux
+
+      ```sh
+      sudo pacman -S pkg-config openssl
+      ```
+
+    - Debian and Ubuntu
+
+      ```sh
+      sudo apt-get install pkg-config libssl-dev
+      ```
+
+    - Fedora
+
+      ```sh
+      sudo dnf install pkg-config perl-FindBin openssl-devel
+      ```
+
+    - Alpine Linux
+
+      ```sh
+      apk add pkgconfig openssl-dev
+      ```
+
+    - openSUSE
+
+      ```sh
+      sudo zypper in libopenssl-devel
+      ```
+
+3.  Install the crate.
     ```sh
     cargo install pastol
     ```
