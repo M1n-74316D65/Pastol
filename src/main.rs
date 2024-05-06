@@ -94,7 +94,7 @@ fn check_user_and_api(args: Args, config: deserializer::Config) {
                     }
                 } else {
                     if args.setuser.is_some() || args.setapikey.is_some() {
-                        "and unlist"
+                        " and unlist"
                     } else {
                         "Unlist"
                     }
