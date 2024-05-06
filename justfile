@@ -16,7 +16,7 @@ run-listed-true: build clean
   ./target/debug/pastol --setunlist true
 run-listed-false: build clean
   ./target/debug/pastol --setunlist false
-run-example: download clean
+run-example: build clean
   ./target/debug/pastol -t example -c "Example content."
 run-example-file: build clean
   ./target/debug/pastol -f example.md
