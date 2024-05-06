@@ -12,7 +12,8 @@ mod write_markdown;
 #[command(version, about, long_about = None)]
 struct Args {
     /// Upload a file or update an existing file on the pastebin.
-    #[structopt(short, long)]
+    // #[structopt(short, long)]
+    #[arg(value_enum)]
     file: Option<String>,
 
     /// Title of the new pastebin or the title of the pastebin to update.
@@ -140,11 +141,13 @@ mod tests {
     fn test_listed() {
         let user = "";
         let api_key = "";
+        let unlist = false;
         let title = "test";
         let content = "This is a test.";
-        petitions::create_listed(
+        petitions::create(
             user.to_string(),
             api_key.to_string(),
+            unlist,
             title.to_string(),
             content.to_string(),
         )

@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 
 #[tokio::main]
-pub async fn create_unlisted(
+pub async fn create(
     user: String,
     api_key: String,
+    unlist: bool,
     title: String,
     content: String,
 ) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
@@ -11,29 +12,9 @@ pub async fn create_unlisted(
     let mut map = HashMap::new();
     map.insert("title", title);
     map.insert("content", content);
-    let client: serde_json::Value = reqwest::Client::new()
-        .post(url)
-        .bearer_auth(api_key)
-        .json(&map)
-        .send()
-        .await?
-        .json()
-        .await?;
-    Ok(client)
-}
-
-#[tokio::main]
-pub async fn create_listed(
-    user: String,
-    api_key: String,
-    title: String,
-    content: String,
-) -> Result<serde_json::Value, Box<dyn std::error::Error>> {
-    let url = format!("{}{}{}", "https://api.omg.lol/address/", user, "/pastebin/");
-    let mut map = HashMap::new();
-    map.insert("title", title);
-    map.insert("content", content);
-    map.insert("listed", "".to_string());
+    if !unlist {
+        map.insert("listed", "".to_string());
+    }
     let client: serde_json::Value = reqwest::Client::new()
         .post(url)
         .bearer_auth(api_key)

@@ -5,12 +5,15 @@
 ## Usage
 
 ```sh
-pastol [OPTIONS]
+pastol [FILE] [OPTIONS]
 ```
+
+## Arguments:
+
+- [FILE] Upload a file or update an existing file on the pastebin
 
 ## Options
 
-- -f, --file <FILE>: Upload a file or update an existing file on the pastebin.
 - -t, --title <TITLE>: Title of the new pastebin or the title of the pastebin to update.
 - -c, --content <CONTENT>: Content of the new pastebin or the content of the pastebin to update.
 - -d, --download <DOWNLOAD>: WIP Download the content of a pastebin.
@@ -109,7 +112,7 @@ pastol [OPTIONS]
 - Upload a file.
 
   ```sh
-  pastol -f example.txt
+  pastol example.txt
   ```
 
 - Download a pastebin as a file.
@@ -121,13 +124,13 @@ pastol [OPTIONS]
 - Upload a file with custom title.
 
   ```sh
-  pastol -f example.txt -t "Example Title"
+  pastol example.txt -t "Example Title"
   ```
 
 - Upload a file with custom content.
 
   ```sh
-  pastol -f example.txt -c "This is the content of the example file."
+  pastol example.txt -c "This is the content of the example file."
   ```
 
 - Upload a custom.

@@ -164,12 +164,12 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                 println!("Error: {:?}", error);
             }
         }
-
-        // Create a listed
-    } else if !config.unlist {
-        let result = petitions::create_listed(
+    } else {
+        // Create
+        let result = petitions::create(
             config.user,
             config.api_key,
+            config.unlist,
             if args.title.is_some() {
                 args.title.unwrap().to_string()
             } else if args.file.is_some() {
@@ -212,53 +212,5 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                 println!("Error: {:?}", error);
             }
         }
-
-        // Create a unlisted
-    } else if config.unlist {
-        let result = petitions::create_unlisted(
-            config.user,
-            config.api_key,
-            if args.title.is_some() {
-                args.title.unwrap().to_string()
-            } else if args.file.is_some() {
-                file_reader::read_path(args.file.clone().unwrap())
-            } else {
-                generate_random_string(15)
-            },
-            if args.content.is_some() {
-                args.content.unwrap().to_string()
-            } else if args.file.is_some() {
-                file_reader::read_file(args.file.clone().unwrap()).unwrap()
-            } else {
-                "".to_string()
-            },
-        );
-        match result {
-            Ok(result) => {
-                if result["request"]["status_code"].as_i64().unwrap() == 200 {
-                    println!(
-                        "{}",
-                        // Remove all html tags
-                        Regex::new(r#"<a[^>]*\bhref="([^"]*)"[^>]*>.*?</a>"#)
-                            .unwrap()
-                            .replace_all(
-                                result["response"]["message"].as_str().unwrap(),
-                                |caps: &regex::Captures<'_>| -> String {
-                                    if let Some(m) = caps.get(1) {
-                                        m.as_str().to_string()
-                                    } else {
-                                        String::new()
-                                    }
-                                },
-                            )
-                    );
-                } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
-                }
-            }
-            Err(error) => {
-                println!("Error: {:?}", error);
-            }
-        };
     }
 }
