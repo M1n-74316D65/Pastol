@@ -83,16 +83,22 @@ fn check_user_and_api(args: Args, config: deserializer::Config) {
             } else {
                 config.unlist
             },
-            // TODO: Make all the possible options
-            if args.setuser.is_some() && args.setapikey.is_some() {
-                "User and api".to_string()
-            } else if args.setapikey.is_some() {
-                "Api".to_string()
-            } else if args.setuser.is_some() {
-                "User".to_string()
-            } else {
-                "Unlist".to_string()
-            },
+            "".to_string()
+                + if args.setuser.is_some() {
+                    "User"
+                } else if args.setapikey.is_some() {
+                    if args.setuser.is_some() {
+                        ", api"
+                    } else {
+                        "Api"
+                    }
+                } else {
+                    if args.setuser.is_some() || args.setapikey.is_some() {
+                        "and unlist"
+                    } else {
+                        "Unlist"
+                    }
+                },
         );
     } else {
         petition_manager::petition_manager(args, config);
