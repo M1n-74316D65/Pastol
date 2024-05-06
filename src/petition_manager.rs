@@ -111,12 +111,12 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
 
     // List pastebins
     } else if args.list {
-        let result = petitions::list(config.user.clone());
+        let result = petitions::list(config.user.clone(), config.api_key.clone());
         match result {
             Ok(result) => {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
                     for i in (0..result["response"]["pastebin"].as_array().unwrap().len()).rev() {
-                        if i != 0 {
+                        if i != result["response"]["pastebin"].as_array().unwrap().len() {
                             println!();
                             println!();
                             println!("--------------------------------------------------");
@@ -125,6 +125,17 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                         println!(
                             "Title: {}",
                             result["response"]["pastebin"][i]["title"].as_str().unwrap()
+                        );
+                        println!(
+                            "Status: {}",
+                            if result["response"]["pastebin"][i]["listed"]
+                                .as_i64()
+                                .is_none()
+                            {
+                                "Unlisted"
+                            } else {
+                                "Listed"
+                            }
                         );
                         println!(
                             "Modified on: {}",

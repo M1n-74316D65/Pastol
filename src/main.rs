@@ -7,7 +7,7 @@ mod petitions;
 mod serializer;
 mod write_markdown;
 
-/// Paste.lol on the command line (cant list unlisted, only target unlisted).
+/// Paste.lol on the command line.
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
@@ -35,7 +35,7 @@ struct Args {
     #[structopt(short, long)]
     remove: Option<String>,
 
-    /// List all the publicly listed pastebins.
+    /// List all pastebins.
     #[structopt(short, long, default_value = "false")]
     list: bool,
 
