@@ -31,7 +31,19 @@ pastol [OPTIONS]
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     ```
 
-2.  If on **Linux** install:
+2.  If on **Linux** or **maybe macOS**(feedback needed):
+
+    - macOS (Homebrew)
+
+      ```sh
+      brew install openssl@3
+      ```
+
+    - macOS (MacPorts)
+
+      ```sh
+      sudo port install openssl
+      ```
 
     - Arch Linux
 
@@ -148,7 +160,19 @@ pastol [OPTIONS]
    git clone https://github.com/M1n-74316D65/Pastol
    ```
 
-3. If on **Linux** install:
+3. If on **Linux** install or **maybe macos**():
+
+   - macOS (Homebrew)
+
+     ```sh
+     brew install openssl@3
+     ```
+
+   - macOS (MacPorts)
+
+     ```sh
+     sudo port install openssl
+     ```
 
    - Arch Linux
 
