@@ -87,8 +87,16 @@ pastol [OPTIONS]
     pastol --setuser your_username --setapikey your_api_key
     ```
 2.  Exampe as adam.
+
     ```sh
     pastel --setuser adam --setapikey a321dwageaawdwadw
+    ```
+
+    Your API key is stored locally in the config file.
+    Linux example path:
+
+    ```sh
+    .config/pastol/config.toml
     ```
 
 - OPTIONAL: Set all the new or updated pastebin to unlisted/hidden.
