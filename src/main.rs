@@ -7,12 +7,13 @@ mod petitions;
 mod serializer;
 mod write_markdown;
 
-/// Paste.lol on the command line (cant list unlisted, only target unlisted).
+/// Paste.lol on the command line.
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
     /// Upload a file or update an existing file on the pastebin.
-    #[structopt(short, long)]
+    // #[structopt(short, long)]
+    #[arg(value_enum)]
     file: Option<String>,
 
     /// Title of the new pastebin or the title of the pastebin to update.
@@ -35,7 +36,7 @@ struct Args {
     #[structopt(short, long)]
     remove: Option<String>,
 
-    /// List all the publicly listed pastebins.
+    /// List all pastebins.
     #[structopt(short, long, default_value = "false")]
     list: bool,
 
@@ -83,16 +84,22 @@ fn check_user_and_api(args: Args, config: deserializer::Config) {
             } else {
                 config.unlist
             },
-            // TODO: Make all the possible options
-            if args.setuser.is_some() && args.setapikey.is_some() {
-                "User and api".to_string()
-            } else if args.setapikey.is_some() {
-                "Api".to_string()
-            } else if args.setuser.is_some() {
-                "User".to_string()
-            } else {
-                "Unlist".to_string()
-            },
+            "".to_string()
+                + if args.setuser.is_some() {
+                    "User"
+                } else if args.setapikey.is_some() {
+                    if args.setuser.is_some() {
+                        ", api"
+                    } else {
+                        "Api"
+                    }
+                } else {
+                    if args.setuser.is_some() || args.setapikey.is_some() {
+                        " and unlist"
+                    } else {
+                        "Unlist"
+                    }
+                },
         );
     } else {
         petition_manager::petition_manager(args, config);
@@ -134,11 +141,13 @@ mod tests {
     fn test_listed() {
         let user = "";
         let api_key = "";
+        let unlist = false;
         let title = "test";
         let content = "This is a test.";
-        petitions::create_listed(
+        petitions::create(
             user.to_string(),
             api_key.to_string(),
+            unlist,
             title.to_string(),
             content.to_string(),
         )
