@@ -10,6 +10,7 @@ pub fn read_file(filename: String) -> io::Result<String> {
 
     for line in reader.lines() {
         content.push_str(&line?);
+        content.push('\n');
     }
 
     Ok(content)
