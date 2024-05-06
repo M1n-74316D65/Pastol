@@ -18,8 +18,12 @@ run-listed-false: build clean
   ./target/debug/pastol --setunlist false
 run-example: build clean
   ./target/debug/pastol -t example -c "Example content."
-run-example-file: build clean
-  ./target/debug/pastol -f example.md
+run-example-file: run-download clean
+  ./target/debug/pastol example.md
+run-example-file-title: run-download clean
+  ./target/debug/pastol example.md -t adw
+run-example-file-content: run-download clean
+  ./target/debug/pastol example.md -c dwa
 run-example-no-title: build clean
   ./target/debug/pastol -c example
 run-example-no-content: build clean
