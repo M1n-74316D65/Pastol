@@ -28,60 +28,87 @@ pastol [FILE] [OPTIONS]
 
 ## Install
 
-1.  Install rust and cargo.
+1. Install rust and cargo.
 
-    ```sh
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    ```
+   ```sh
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
 
-2.  If on **Linux** or **maybe macOS**(feedback needed):
+1. Install pastol.
 
-    - macOS (Homebrew)
+   - With [binstall](https://github.com/cargo-bins/cargo-binstall) (better)
 
-      ```sh
-      brew install openssl@3
-      ```
+     1. Install [binstall](https://github.com/cargo-bins/cargo-binstall)
 
-    - macOS (MacPorts)
+        #### Linux and macOS
 
-      ```sh
-      sudo port install openssl
-      ```
+        ```
+        curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+        ```
 
-    - Arch Linux
+        #### Windows
 
-      ```sh
-      sudo pacman -S pkg-config openssl
-      ```
+        ```
+        Set-ExecutionPolicy Unrestricted -Scope Process; iex (iwr "https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.ps1").Content
+        ```
 
-    - Debian and Ubuntu
+     2. Install pastol
 
-      ```sh
-      sudo apt-get install pkg-config libssl-dev
-      ```
+        ```sh
+        cargo binstall pastol
+        ```
 
-    - Fedora
+   - Without [binstall](https://github.com/cargo-bins/cargo-binstall)
 
-      ```sh
-      sudo dnf install pkg-config perl-FindBin openssl-devel
-      ```
+     1. If on **Linux** or **maybe macOS**(feedback needed):
 
-    - Alpine Linux
+        - macOS (Homebrew)
 
-      ```sh
-      apk add pkgconfig openssl-dev
-      ```
+          ```sh
+          brew install openssl@3
+          ```
 
-    - openSUSE
+        - macOS (MacPorts)
 
-      ```sh
-      sudo zypper in libopenssl-devel
-      ```
+          ```sh
+          sudo port install openssl
+          ```
 
-3.  Install the crate.
-    ```sh
-    cargo install pastol
-    ```
+        - Arch Linux
+
+          ```sh
+          sudo pacman -S pkg-config openssl
+          ```
+
+        - Debian and Ubuntu
+
+          ```sh
+          sudo apt-get install pkg-config libssl-dev
+          ```
+
+        - Fedora
+
+          ```sh
+          sudo dnf install pkg-config perl-FindBin openssl-devel
+          ```
+
+        - Alpine Linux
+
+          ```sh
+          apk add pkgconfig openssl-dev
+          ```
+
+        - openSUSE
+
+          ```sh
+          sudo zypper in libopenssl-devel
+          ```
+
+     2. Install the crate.
+
+     ```sh
+     cargo install pastol
+     ```
 
 ## Setup
 
