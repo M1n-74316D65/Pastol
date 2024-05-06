@@ -79,9 +79,10 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
                     println!();
                     println!("--------------------------------------------------");
+
                     println!(
                         "Title: {}",
-                        result["response"]["paste"]["title"].as_str().unwrap()
+                        termimad::inline(result["response"]["paste"]["title"].as_str().unwrap())
                     );
                     println!(
                         "Modified on: {}",
@@ -95,11 +96,9 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                     if result["response"]["paste"]["listed"] == 1 {
                         println!("Listed");
                     }
-                    println!("Content:");
-                    println!(
-                        "{}",
-                        result["response"]["paste"]["content"].as_str().unwrap()
-                    );
+                    println!("Content: ");
+                    println!();
+                    termimad::print_text(result["response"]["paste"]["content"].as_str().unwrap());
                 } else {
                     println!("{}", result["response"]["message"].as_str().unwrap());
                 }
@@ -150,11 +149,10 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                         );
                         println!("Content: ");
                         println!();
-                        println!(
-                            "{}",
+                        termimad::print_text(
                             result["response"]["pastebin"][i]["content"]
                                 .as_str()
-                                .unwrap()
+                                .unwrap(),
                         );
                     }
                 } else {
