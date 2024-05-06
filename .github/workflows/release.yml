@@ -1,4 +1,4 @@
-name: Release
+name: Release binstall binaries
 
 permissions:
   contents: write
