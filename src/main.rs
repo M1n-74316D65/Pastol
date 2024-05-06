@@ -93,12 +93,10 @@ fn check_user_and_api(args: Args, config: deserializer::Config) {
                     } else {
                         "Api"
                     }
+                } else if args.setuser.is_some() || args.setapikey.is_some() {
+                    " and unlist"
                 } else {
-                    if args.setuser.is_some() || args.setapikey.is_some() {
-                        " and unlist"
-                    } else {
-                        "Unlist"
-                    }
+                    "Unlist"
                 },
         );
     } else {
