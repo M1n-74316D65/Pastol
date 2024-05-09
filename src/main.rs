@@ -40,7 +40,7 @@ struct Args {
     #[structopt(short, long, default_value = "false")]
     list: bool,
 
-    /// Search for pastebins.
+    /// Search by title for pastebins.
     #[structopt(short, long)]
     search: Option<String>,
 
