@@ -30,7 +30,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         );
         match result {
             Ok(result) => {
-                println!("{}", result["response"]["message"].as_str().unwrap());
+                println!("\n{}", result["response"]["message"].as_str().unwrap());
             }
             Err(error) => {
                 println!("Error: {}", error);
@@ -54,7 +54,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                             .to_string(),
                     );
                 } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -63,11 +63,11 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         }
 
     // Info
-    } else if args.info.is_some() {
+    } else if args.view.is_some() {
         let result = petitions::show(
             config.user.clone(),
             config.api_key.clone(),
-            args.info.clone().unwrap(),
+            args.view.clone().unwrap(),
         );
         match result {
             Ok(result) => {
@@ -98,7 +98,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                         .as_str(),
                     );
                 } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -142,7 +142,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                     }
                 } else {
                     // I don't know how it can fail but if it does
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -200,7 +200,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                     }
                 } else {
                     // I don't know how it can fail but if it does
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -232,7 +232,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
             Ok(result) => {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
                     println!(
-                        "{}",
+                        "\n{}",
                         // Remove all html tags
                         Regex::new(r#"<a[^>]*\bhref="([^"]*)"[^>]*>.*?</a>"#)
                             .unwrap()
@@ -248,7 +248,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                             )
                     );
                 } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {

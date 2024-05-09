@@ -30,7 +30,7 @@ struct Args {
 
     /// Get detailed information about a pastebin.
     #[structopt(short, long)]
-    info: Option<String>,
+    view: Option<String>,
 
     /// Remove a pastebin from the pastebin service.
     #[structopt(short, long)]

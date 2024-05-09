@@ -40,10 +40,10 @@ run-search: build clean
   ./target/debug/pastol -s logi
 run-search-fail: build clean
   ./target/debug/pastol -s logidwaaaaaaaaaaa
-run-info: run-example clean
-  ./target/debug/pastol --info example
-run-info-fail: build clean
-  ./target/debug/pastol --info qZ5pR9KcX7dA2eW3
+run-view: run-example clean
+  ./target/debug/pastol -v example
+run-view-fail: build clean
+  ./target/debug/pastol -v qZ5pR9KcX7dA2eW3
 run-download: run-example clean
   ./target/debug/pastol --download example
 run-download-fail: build clean
