@@ -21,7 +21,6 @@ fn generate_random_string(length: usize) -> String {
 }
 
 pub fn petition_manager(args: Args, config: deserializer::Config) {
-    // println!("run");
     // Remove
     if args.remove.is_some() {
         let result = petitions::remove(
@@ -31,7 +30,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         );
         match result {
             Ok(result) => {
-                println!("{}", result["response"]["message"].as_str().unwrap());
+                println!("\n{}", result["response"]["message"].as_str().unwrap());
             }
             Err(error) => {
                 println!("Error: {}", error);
@@ -49,17 +48,13 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                             .as_str()
                             .unwrap()
                             .to_string(),
-                        // "# ".to_string()
-                        //     + result["response"]["paste"]["title"].as_str().unwrap()
-                        //     + "\n\n"
-                        //     + result["response"]["paste"]["content"].as_str().unwrap(),
                         result["response"]["paste"]["content"]
                             .as_str()
                             .unwrap()
                             .to_string(),
                     );
                 } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -68,39 +63,42 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
         }
 
     // Info
-    } else if args.info.is_some() {
+    } else if args.view.is_some() {
         let result = petitions::show(
             config.user.clone(),
             config.api_key.clone(),
-            args.info.clone().unwrap(),
+            args.view.clone().unwrap(),
         );
         match result {
             Ok(result) => {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
-                    println!();
-                    println!("--------------------------------------------------");
-
-                    println!(
-                        "Title: {}",
-                        termimad::inline(result["response"]["paste"]["title"].as_str().unwrap())
+                    termimad::print_text(
+                        ("\n----".to_string()
+                            + "\n\n# "
+                            + result["response"]["paste"]["title"].as_str().unwrap()
+                            + "\n## "
+                            + if result["response"]["paste"]["listed"].as_i64().is_none() {
+                                "Unlisted"
+                            } else {
+                                "Listed"
+                            }
+                            + "\n## "
+                            + chrono::DateTime::<chrono::Utc>::from(
+                                UNIX_EPOCH
+                                    + Duration::from_secs(
+                                        result["response"]["paste"]["modified_on"]
+                                            .as_u64()
+                                            .unwrap(),
+                                    ),
+                            )
+                            .to_string()
+                            .as_str()
+                            + "\n\n"
+                            + result["response"]["paste"]["content"].as_str().unwrap())
+                        .as_str(),
                     );
-                    println!(
-                        "Modified on: {}",
-                        chrono::DateTime::<chrono::Utc>::from(
-                            UNIX_EPOCH
-                                + Duration::from_secs(
-                                    result["response"]["paste"]["modified_on"].as_u64().unwrap()
-                                )
-                        )
-                    );
-                    if result["response"]["paste"]["listed"] == 1 {
-                        println!("Listed");
-                    }
-                    println!("Content: ");
-                    println!();
-                    termimad::print_text(result["response"]["paste"]["content"].as_str().unwrap());
                 } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -115,49 +113,94 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
             Ok(result) => {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
                     for i in (0..result["response"]["pastebin"].as_array().unwrap().len()).rev() {
-                        if i != result["response"]["pastebin"].as_array().unwrap().len() {
-                            println!();
-                            println!();
-                            println!("--------------------------------------------------");
-                            // println!("Number: {}", i);
-                        }
-                        println!(
-                            "Title: {}",
-                            result["response"]["pastebin"][i]["title"].as_str().unwrap()
-                        );
-                        println!(
-                            "Status: {}",
-                            if result["response"]["pastebin"][i]["listed"]
-                                .as_i64()
-                                .is_none()
-                            {
-                                "Unlisted"
-                            } else {
-                                "Listed"
-                            }
-                        );
-                        println!(
-                            "Modified on: {}",
-                            chrono::DateTime::<chrono::Utc>::from(
-                                UNIX_EPOCH
-                                    + Duration::from_secs(
-                                        result["response"]["pastebin"][i]["modified_on"]
-                                            .as_u64()
-                                            .unwrap()
-                                    )
-                            )
-                        );
-                        println!("Content: ");
-                        println!();
                         termimad::print_text(
-                            result["response"]["pastebin"][i]["content"]
-                                .as_str()
-                                .unwrap(),
+                            ("\n----".to_string()
+                                + "\n\n**Title: **"
+                                + result["response"]["pastebin"][i]["title"].as_str().unwrap()
+                                + "\n**Status: **"
+                                + if result["response"]["pastebin"][i]["listed"]
+                                    .as_i64()
+                                    .is_none()
+                                {
+                                    "Unlisted"
+                                } else {
+                                    "Listed"
+                                }
+                                + "\n**Modified on: **"
+                                + chrono::DateTime::<chrono::Utc>::from(
+                                    UNIX_EPOCH
+                                        + Duration::from_secs(
+                                            result["response"]["pastebin"][i]["modified_on"]
+                                                .as_u64()
+                                                .unwrap(),
+                                        ),
+                                )
+                                .to_string()
+                                .as_str())
+                            .as_str(),
                         );
                     }
                 } else {
                     // I don't know how it can fail but if it does
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
+                }
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+            }
+        }
+    } else if args.search.is_some() {
+        let result = petitions::list(config.user.clone(), config.api_key.clone());
+        match result {
+            Ok(result) => {
+                if result["request"]["status_code"].as_i64().unwrap() == 200 {
+                    let mut exists = false;
+                    for i in (0..result["response"]["pastebin"].as_array().unwrap().len()).rev() {
+                        // Check if the script contains the word "hola"
+                        if result["response"]["pastebin"][i]["title"]
+                            .as_str()
+                            .unwrap()
+                            .contains(&args.search.clone().unwrap())
+                        {
+                            termimad::print_text(
+                                ("\n----".to_string()
+                                    + "\n\n# "
+                                    + result["response"]["pastebin"][i]["title"].as_str().unwrap()
+                                    + "\n## "
+                                    + if result["response"]["pastebin"][i]["listed"]
+                                        .as_i64()
+                                        .is_none()
+                                    {
+                                        "Unlisted"
+                                    } else {
+                                        "Listed"
+                                    }
+                                    + "\n## "
+                                    + chrono::DateTime::<chrono::Utc>::from(
+                                        UNIX_EPOCH
+                                            + Duration::from_secs(
+                                                result["response"]["pastebin"][i]["modified_on"]
+                                                    .as_u64()
+                                                    .unwrap(),
+                                            ),
+                                    )
+                                    .to_string()
+                                    .as_str()
+                                    + "\n\n"
+                                    + result["response"]["pastebin"][i]["content"]
+                                        .as_str()
+                                        .unwrap())
+                                .as_str(),
+                            );
+                            exists = true;
+                        }
+                    }
+                    if !exists {
+                        termimad::print_text("\n **Not found**");
+                    }
+                } else {
+                    // I don't know how it can fail but if it does
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {
@@ -189,7 +232,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
             Ok(result) => {
                 if result["request"]["status_code"].as_i64().unwrap() == 200 {
                     println!(
-                        "{}",
+                        "\n{}",
                         // Remove all html tags
                         Regex::new(r#"<a[^>]*\bhref="([^"]*)"[^>]*>.*?</a>"#)
                             .unwrap()
@@ -205,7 +248,7 @@ pub fn petition_manager(args: Args, config: deserializer::Config) {
                             )
                     );
                 } else {
-                    println!("{}", result["response"]["message"].as_str().unwrap());
+                    println!("\n{}", result["response"]["message"].as_str().unwrap());
                 }
             }
             Err(error) => {

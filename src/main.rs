@@ -28,13 +28,17 @@ struct Args {
     #[structopt(short, long)]
     download: Option<String>,
 
-    /// Get detailed information about a pastebin.
+    /// View the pastebin.
     #[structopt(short, long)]
-    info: Option<String>,
+    view: Option<String>,
 
     /// Remove a pastebin from the pastebin service.
     #[structopt(short, long)]
     remove: Option<String>,
+
+    /// Search by title for pastebins.
+    #[structopt(short, long)]
+    search: Option<String>,
 
     /// List all pastebins.
     #[structopt(short, long, default_value = "false")]

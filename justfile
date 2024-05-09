@@ -33,13 +33,17 @@ run-exaple-remove: run-example clean
 run-exaple-remove-fail: build clean
   ./target/debug/pastol -r exampledwadawdas
 run-list: build clean
-  ./target/debug/pastol --list
+  ./target/debug/pastol -l
 run-list-fail: build clean
-  ./target/debug/pastol --list
-run-info: run-example clean
-  ./target/debug/pastol --info example
-run-info-fail: build clean
-  ./target/debug/pastol --info qZ5pR9KcX7dA2eW3
+  ./target/debug/pastol -l
+run-search: build clean
+  ./target/debug/pastol -s logi
+run-search-fail: build clean
+  ./target/debug/pastol -s logidwaaaaaaaaaaa
+run-view: run-example clean
+  ./target/debug/pastol -v example
+run-view-fail: build clean
+  ./target/debug/pastol -v qZ5pR9KcX7dA2eW3
 run-download: run-example clean
   ./target/debug/pastol --download example
 run-download-fail: build clean
