@@ -14,17 +14,18 @@ pastol [FILE] [OPTIONS]
 
 ## Options
 
-- -t, --title <TITLE>: Title of the new pastebin or the title of the pastebin to update.
-- -c, --content <CONTENT>: Content of the new pastebin or the content of the pastebin to update.
-- -d, --download <DOWNLOAD>: Download the content of a pastebin.
-- -i, --info <INFO>: Get detailed information about a pastebin.
-- -r, --remove <REMOVE>: Remove a pastebin from the pastebin service.
-- -l, --list: List all the publicly listed pastebins.
-- --setuser <SETUSER>: Set your username for the pastebin service.
-- --setapikey <SETAPIKEY>: Set your API key for the pastebin service.
-- --setunlist <SETUNLIST>: Set to true if you want newly created pastebins to be unlisted by default. (Default: false) [possible values: true, false].
-- -h, --help: Print help.
-- -V, --version: Print version.
+- -t, --title <TITLE>         Title of the new pastebin or the title of the pastebin to update.
+- -c, --content <CONTENT>     Content of the new pastebin or the content of the pastebin to update.
+- -d, --download <DOWNLOAD>   Download the content of a pastebin.
+- -i, --view <VIEW>           View the pastebin.
+- -r, --remove <REMOVE>       Remove a pastebin from the pastebin service.
+- -s, --search <SEARCH>       Search by title for pastebins
+- -l, --list                  List all the publicly listed pastebins.
+- --setuser <SETUSER>         Set your username for the pastebin service.
+- --setapikey <SETAPIKEY>     Set your API key for the pastebin service.
+- --setunlist <SETUNLIST>     Set to true if you want newly created pastebins to be unlisted by default. (Default: false) [possible values: true, false].
+- -h, --help                  Print help.
+- -V, --version               Print version.
 
 ## Install
 
@@ -178,10 +179,16 @@ pastol [FILE] [OPTIONS]
   pastol -l
   ```
 
-- Get all the info of a pastebin.
+- View the pastebin.
 
   ```sh
-  pastol -i example
+  pastol -v example
+  ```
+
+- Search by title for pastebins.
+
+  ```sh
+  pastol -s exa
   ```
 
 ## Build
