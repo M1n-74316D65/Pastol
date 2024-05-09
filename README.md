@@ -16,7 +16,7 @@ pastol [FILE] [OPTIONS]
 
 - -t, --title <TITLE>: Title of the new pastebin or the title of the pastebin to update.
 - -c, --content <CONTENT>: Content of the new pastebin or the content of the pastebin to update.
-- -d, --download <DOWNLOAD>: WIP Download the content of a pastebin.
+- -d, --download <DOWNLOAD>: Download the content of a pastebin.
 - -i, --info <INFO>: Get detailed information about a pastebin.
 - -r, --remove <REMOVE>: Remove a pastebin from the pastebin service.
 - -l, --list: List all the publicly listed pastebins.
