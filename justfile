@@ -33,9 +33,13 @@ run-exaple-remove: run-example clean
 run-exaple-remove-fail: build clean
   ./target/debug/pastol -r exampledwadawdas
 run-list: build clean
-  ./target/debug/pastol --list
+  ./target/debug/pastol -l
 run-list-fail: build clean
-  ./target/debug/pastol --list
+  ./target/debug/pastol -l
+run-search: build clean
+  ./target/debug/pastol -s logi
+run-search-fail: build clean
+  ./target/debug/pastol -s logidwaaaaaaaaaaa
 run-info: run-example clean
   ./target/debug/pastol --info example
 run-info-fail: build clean
