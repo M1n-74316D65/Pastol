@@ -2,6 +2,8 @@
 
 Pastol enables users to interact with Paste.lol service directly from the command line. Pastol allows you to share text and files quickly and conveniently from the CL.
 
+![example](https://github.com/M1n-74316D65/Pastol/assets/54779580/ccfe2741-4ac9-437f-98f0-2a6c762997d1)
+
 ## Usage
 
 ```sh
