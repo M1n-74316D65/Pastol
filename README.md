@@ -5,25 +5,30 @@ Pastol enables users to interact with Paste.lol service directly from the comman
 ## Usage
 
 ```sh
-pastol [FILE] [OPTIONS]
+pastol [OPTIONS] <COMMAND>
 ```
 
-## Command:
+### Commands:
 
-- add                 Create or update a pastebin on the pastebin service
-- remove || rm        Remove a pastebin on the pastebin service
-- download || dl      Download a pastebin
-- list || ls          List all pastebins
-- view || cat         View the pastebin
-- search || find      Search by title for pastebins
-- help                Print this message
+```sh
+add       Create or update a pastebin on the pastebin service
+remove    || rm - Remove a pastebin on the pastebin service
+download  || dl - Download a pastebin
+list      || ls - List all pastebins
+view      || cat - View the pastebin
+search    || find - Search by title for pastebins
+help      Print this message or the help of the given subcommand(s)
+```
 
-Options:
+### Options:
 
--     --setuser <SETUSER>      Set your username for the pastebin service
--     --setapikey <SETAPIKEY>  Set your API key for the pastebin service
--     --setunlist <SETUNLIST>  If true unlisted by default.
-- -h,                      --help Print help
+```sh
+--setuser <SETUSER>      Set your username for the pastebin service
+--setapikey <SETAPIKEY>  Set your API key for the pastebin service
+--setunlist <SETUNLIST>  If true unlisted by default.
+-h, --help               Print help
+
+```
 
 ## Install
 
