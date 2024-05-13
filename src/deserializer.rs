@@ -4,7 +4,7 @@ use serde_derive::Deserialize;
 use std::fs::File;
 use std::io::{self, prelude::*};
 // Define a struct to hold your configuration
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Config {
     pub user: String,
     pub api_key: String,
