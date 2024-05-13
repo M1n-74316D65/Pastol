@@ -2,32 +2,28 @@
 
 Pastol enables users to interact with Paste.lol service directly from the command line. Pastol allows you to share text and files quickly and conveniently from the CL.
 
-![example](https://github.com/M1n-74316D65/Pastol/assets/54779580/ccfe2741-4ac9-437f-98f0-2a6c762997d1)
-
 ## Usage
 
 ```sh
 pastol [FILE] [OPTIONS]
 ```
 
-## Arguments:
+## Command:
 
-- [FILE] Upload a file or update an existing file on the pastebin
+- add                 Create or update a pastebin on the pastebin service
+- remove || rm        Remove a pastebin on the pastebin service
+- download || dl      Download a pastebin
+- list || ls          List all pastebins
+- view || cat         View the pastebin
+- search || find      Search by title for pastebins
+- help                Print this message
 
-## Options
+Options:
 
-- -t, --title <TITLE>         Title of the new pastebin or the title of the pastebin to update.
-- -c, --content <CONTENT>     Content of the new pastebin or the content of the pastebin to update.
-- -d, --download <DOWNLOAD>   Download the content of a pastebin.
-- -i, --view <VIEW>           View the pastebin.
-- -r, --remove <REMOVE>       Remove a pastebin from the pastebin service.
-- -s, --search <SEARCH>       Search by title for pastebins
-- -l, --list                  List all the publicly listed pastebins.
-- --setuser <SETUSER>         Set your username for the pastebin service.
-- --setapikey <SETAPIKEY>     Set your API key for the pastebin service.
-- --setunlist <SETUNLIST>     Set to true if you want newly created pastebins to be unlisted by default. (Default: false) [possible values: true, false].
-- -h, --help                  Print help.
-- -V, --version               Print version.
+-     --setuser <SETUSER>      Set your username for the pastebin service
+-     --setapikey <SETAPIKEY>  Set your API key for the pastebin service
+-     --setunlist <SETUNLIST>  If true unlisted by default.
+- -h,                      --help Print help
 
 ## Install
 
@@ -148,49 +144,49 @@ pastol [FILE] [OPTIONS]
 - Download a pastebin as a file.
 
   ```sh
-  pastol -d example-title-as-apears-on-the-url
+  pastol download example-title-as-apears-on-the-url
   ```
 
 - Upload a file with custom title.
 
   ```sh
-  pastol example.txt -t "Example Title"
+  pastol add example.txt -t "Example Title"
   ```
 
 - Upload a file with custom content.
 
   ```sh
-  pastol example.txt -c "This is the content of the example file."
+  pastol add example.txt -c "This is the content of the example file."
   ```
 
 - Upload a custom.
 
   ```sh
-  pastol -t title-example -c "pastebin content example"
+  pastol add -t title-example -c "pastebin content example"
   ```
 
 - Remove a pastebin.
 
   ```sh
-  pastol -r hello-world
+  pastol remove hello-world
   ```
 
 - List all listed pastebins.
 
   ```sh
-  pastol -l
+  pastol list
   ```
 
 - View the pastebin.
 
   ```sh
-  pastol -v example
+  pastol view example
   ```
 
 - Search by title for pastebins.
 
   ```sh
-  pastol -s exa
+  pastol search exa
   ```
 
 ## Build
