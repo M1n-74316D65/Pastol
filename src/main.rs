@@ -22,10 +22,6 @@ struct AddArgs {
     /// Content of the new pastebin or the content of the pastebin to update.
     #[structopt(short, long)]
     content: Option<String>,
-
-    /// If true unlisted by default. (Default: false)
-    #[structopt(long)]
-    setunlist: Option<bool>,
 }
 
 /// || rm - Remove a pastebin on the pastebin service.
@@ -55,6 +51,7 @@ struct ViewArgs {
 struct SearchArgs {
     title: String,
 }
+
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 enum CliSub {
@@ -163,6 +160,10 @@ struct Cli {
     #[structopt(long)]
     setapikey: Option<String>,
 
+    /// If true unlisted by default. (Default: false)
+    #[structopt(long)]
+    setunlist: Option<bool>,
+
     #[command(subcommand)]
     subcommand: CliSub,
 }
@@ -191,7 +192,11 @@ fn check_user_and_api(args: Cli, config: deserializer::Config) {
         } else {
             config.api_key.clone()
         },
-        config.unlist,
+        if args.setunlist.is_some() {
+            args.setunlist.unwrap()
+        } else {
+            config.unlist
+        },
         "".to_string()
             + if args.setuser.is_some() {
                 "User"
@@ -214,7 +219,7 @@ fn main() {
     let result = deserializer::deserialized();
     match result {
         Ok(config) => {
-            if args.setuser.is_some() || args.setapikey.is_some() {
+            if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
                 check_user_and_api(args.clone(), config.clone());
             }
             match &args.subcommand {
