@@ -237,7 +237,6 @@ fn main() {
                 }
                 CliSub::Remove(args) => {
                     petition_manager::remove(args, config);
-                    println!("'myapp add' was used, name is: {args:?}")
                 }
                 CliSub::List(_) => {
                     petition_manager::list(config);
