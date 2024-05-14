@@ -1,4 +1,6 @@
-# [Pastol](https://m1n.url.lol/pastol-repo) is [paste.lol](https://paste.lol/) Unofficial Command Line Interface (CLI)
+# Pastol is [paste.lol](https://paste.lol/) Unofficial Command Line Interface (CLI)
+
+> [**HERE**](https://m1n.url.lol/pastol-repo) you can check the site of this repo.
 
 Pastol enables users to interact with paste.lol service directly from the command line. </br>Allows you to share text and files quickly and conveniently.
 
