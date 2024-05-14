@@ -10,24 +10,15 @@ pastol [OPTIONS] <COMMAND>
 
 ### Commands:
 
-```sh
+```
 add       Create or update a pastebin on the pastebin service
 remove    || rm - Remove a pastebin on the pastebin service
 download  || dl - Download a pastebin
 list      || ls - List all pastebins
 view      || cat - View the pastebin
 search    || find - Search by title for pastebins
+settings  Change settings
 help      Print this message or the help of the given subcommand(s)
-```
-
-### Options:
-
-```sh
---setuser <SETUSER>      Set your username for the pastebin service
---setapikey <SETAPIKEY>  Set your API key for the pastebin service
---setunlist <SETUNLIST>  If true unlisted by default.
--h, --help               Print help
-
 ```
 
 ## Install
