@@ -186,9 +186,6 @@ fn main() {
     let result = deserializer::deserialized();
     match result {
         Ok(config) => {
-            // if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
-            //     check_user_and_api(args.clone(), config.clone());
-            // }
             match &args.subcommand {
                 Some(CliSub::Add(args)) => {
                     petition_manager::add(args, config);
