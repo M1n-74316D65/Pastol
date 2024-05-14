@@ -1,6 +1,7 @@
 use clap::error::{Error, ErrorKind};
 use clap::{ArgMatches, Args as _, Command, FromArgMatches, Parser, Subcommand};
 
+mod config_manager;
 mod deserializer;
 mod file_reader;
 mod petition_manager;
@@ -52,6 +53,22 @@ struct SearchArgs {
     title: String,
 }
 
+/// Change settings.
+#[derive(Parser, Debug, Clone)]
+struct SettingsArgs {
+    ///  Set your username for the pastebin service.
+    #[structopt(long)]
+    user: Option<String>,
+
+    ///  Set your API key for the pastebin service.
+    #[structopt(long)]
+    apikey: Option<String>,
+
+    ///  Set to true if you want newly created pastebins to be unlisted by default.
+    #[structopt(long)]
+    unlist: Option<bool>,
+}
+
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 enum CliSub {
@@ -61,6 +78,7 @@ enum CliSub {
     List(ListArgs),
     View(ViewArgs),
     Search(SearchArgs),
+    Settings(SettingsArgs),
 }
 
 impl FromArgMatches for CliSub {
@@ -72,13 +90,14 @@ impl FromArgMatches for CliSub {
             Some(("list", args)) => Ok(Self::List(ListArgs::from_arg_matches(args)?)),
             Some(("view", args)) => Ok(Self::View(ViewArgs::from_arg_matches(args)?)),
             Some(("search", args)) => Ok(Self::Search(SearchArgs::from_arg_matches(args)?)),
+            Some(("settings", args)) => Ok(Self::Settings(SettingsArgs::from_arg_matches(args)?)),
             Some((_, _)) => Err(Error::raw(
                 ErrorKind::InvalidSubcommand,
-                "Valid subcommands are `add` and `remove`",
+                "Invalid subcommands",
             )),
             None => Err(Error::raw(
                 ErrorKind::MissingSubcommand,
-                "Valid subcommands are `add` and `remove`",
+                "Invalid subcommands",
             )),
         }
     }
@@ -92,10 +111,13 @@ impl FromArgMatches for CliSub {
             Some(("list", args)) => *self = Self::List(ListArgs::from_arg_matches(args)?),
             Some(("view", args)) => *self = Self::View(ViewArgs::from_arg_matches(args)?),
             Some(("search", args)) => *self = Self::Search(SearchArgs::from_arg_matches(args)?),
+            Some(("settings", args)) => {
+                *self = Self::Settings(SettingsArgs::from_arg_matches(args)?)
+            }
             Some((_, _)) => {
                 return Err(Error::raw(
                     ErrorKind::InvalidSubcommand,
-                    "Valid subcommands are `add` and `remove`",
+                    "Invalid subcommands",
                 ))
             }
             None => (),
@@ -116,6 +138,7 @@ impl Subcommand for CliSub {
             .subcommand(SearchArgs::augment_args(
                 Command::new("search").alias("find"),
             ))
+            .subcommand(SettingsArgs::augment_args(Command::new("settings")))
             .subcommand_required(true)
     }
     fn augment_subcommands_for_update(cmd: Command) -> Command {
@@ -129,6 +152,7 @@ impl Subcommand for CliSub {
             .subcommand(SearchArgs::augment_args(
                 Command::new("search").alias("find"),
             ))
+            .subcommand(SettingsArgs::augment_args(Command::new("settings")))
             .subcommand_required(true)
     }
     fn has_subcommand(name: &str) -> bool {
@@ -145,6 +169,7 @@ impl Subcommand for CliSub {
                 | "cat"
                 | "search"
                 | "find"
+                | "settings"
         )
     }
 }
@@ -152,66 +177,8 @@ impl Subcommand for CliSub {
 /// Paste.lol on the command line.
 #[derive(Parser, Debug, Clone)]
 struct Cli {
-    /// Set your username for the pastebin service.
-    #[structopt(long)]
-    setuser: Option<String>,
-
-    /// Set your API key for the pastebin service.
-    #[structopt(long)]
-    setapikey: Option<String>,
-
-    /// If true unlisted by default. (Default: false)
-    #[structopt(long)]
-    setunlist: Option<bool>,
-
     #[command(subcommand)]
-    subcommand: CliSub,
-}
-
-fn serialize(user: String, api_key: String, unlist: bool, output: String) {
-    let result = serializer::serialize(user, api_key, unlist);
-    match result {
-        Ok(_config) => {
-            println!("{} sucessfully set.", output);
-        }
-        Err(e) => {
-            eprintln!("Error loading config: {}", e);
-        }
-    }
-}
-
-fn check_user_and_api(args: Cli, config: deserializer::Config) {
-    serialize(
-        if args.setuser.is_some() {
-            args.setuser.clone().unwrap()
-        } else {
-            config.user.clone()
-        },
-        if args.setapikey.is_some() {
-            args.setapikey.clone().unwrap()
-        } else {
-            config.api_key.clone()
-        },
-        if args.setunlist.is_some() {
-            args.setunlist.unwrap()
-        } else {
-            config.unlist
-        },
-        "".to_string()
-            + if args.setuser.is_some() {
-                "User"
-            } else if args.setapikey.is_some() {
-                if args.setuser.is_some() {
-                    ", api"
-                } else {
-                    "Api"
-                }
-            } else if args.setuser.is_some() || args.setapikey.is_some() {
-                " and unlist"
-            } else {
-                "Unlist"
-            },
-    );
+    subcommand: Option<CliSub>,
 }
 
 fn main() {
@@ -219,34 +186,38 @@ fn main() {
     let result = deserializer::deserialized();
     match result {
         Ok(config) => {
-            if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
-                check_user_and_api(args.clone(), config.clone());
-            }
+            // if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
+            //     check_user_and_api(args.clone(), config.clone());
+            // }
             match &args.subcommand {
-                CliSub::Add(args) => {
+                Some(CliSub::Add(args)) => {
                     petition_manager::add(args, config);
                 }
-                CliSub::Search(args) => {
+                Some(CliSub::Search(args)) => {
                     petition_manager::search(args, config);
                 }
-                CliSub::Download(args) => {
+                Some(CliSub::Download(args)) => {
                     petition_manager::download(args, config);
                 }
-                CliSub::View(args) => {
+                Some(CliSub::View(args)) => {
                     petition_manager::view(args, config);
                 }
-                CliSub::Remove(args) => {
+                Some(CliSub::Remove(args)) => {
                     petition_manager::remove(args, config);
                 }
-                CliSub::List(_) => {
+                Some(CliSub::List(_)) => {
                     petition_manager::list(config);
                 }
+                Some(CliSub::Settings(args)) => {
+                    config_manager::check_user_and_api(args, config);
+                }
+                None => println!("No command provided"),
             }
         }
 
         // First run
         Err(_e) => {
-            serialize(
+            config_manager::serialize(
                 "rust".to_string(),
                 "rocks".to_string(),
                 false,
@@ -254,9 +225,13 @@ fn main() {
             );
             let result = deserializer::deserialized();
             match result {
-                Ok(config) => {
-                    check_user_and_api(args.clone(), config);
-                }
+                Ok(config) => match &args.subcommand {
+                    Some(CliSub::Settings(args)) => {
+                        config_manager::check_user_and_api(args, config);
+                    }
+                    None => println!("No command provided"),
+                    _ => println!("No command provided"),
+                },
 
                 Err(_e) => {}
             }
