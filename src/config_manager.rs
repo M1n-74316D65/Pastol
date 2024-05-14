@@ -43,10 +43,14 @@ pub fn check_user_and_api(args: &SettingsArgs, config: deserializer::Config) {
             } else {
                 ""
             }
-            + if args.user.is_some() || args.apikey.is_some() {
-                " and unlist"
+            + if args.unlist.is_some() {
+                if args.user.is_some() || args.apikey.is_some() {
+                    " and unlist"
+                } else {
+                    "Unlist"
+                }
             } else {
-                "Unlist"
+                ""
             },
     );
 }
