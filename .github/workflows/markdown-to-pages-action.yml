@@ -15,21 +15,25 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       #   - run: cp ./images ./dist/images/
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
+      - name: publish to pgs
+        uses: picosh/pgs-action@v3
         with:
-          path: dist
+          user: erock
+          key: ${{ secrets.PRIVATE_KEY }}
+          # trailing slash is important (we use rsync)
+          src: "./dist/"
+          # update or create a new project on-the-fly
+          project: "pastol"
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/deploy-pages@v4
-        id: deployment
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   steps:
+  #     - uses: actions/deploy-pages@v4
+  #       id: deployment
