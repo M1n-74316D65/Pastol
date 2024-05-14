@@ -4,8 +4,8 @@ name: Pages
 on:
   workflow_dispatch:
   push:
-    # tags:
-    #   - v[0-9]+.*
+    tags:
+      - v[0-9]+.*
 jobs:
   build:
     runs-on: ubuntu-latest
