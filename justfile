@@ -13,9 +13,9 @@ install: clean
 run-help: build clean
   ./target/debug/pastol -h
 run-listed-true: build clean
-  ./target/debug/pastol --setunlist true
+  ./target/debug/pastol settings --unlist true
 run-listed-false: build clean
-  ./target/debug/pastol --setunlist false
+  ./target/debug/pastol settings --unlist false
 run-example: build clean
   ./target/debug/pastol add -t example -c "Example content."
 run-example-file: run-download clean
