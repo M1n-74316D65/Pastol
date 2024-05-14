@@ -9,10 +9,10 @@ mod petitions;
 mod serializer;
 mod write_markdown;
 
-/// Create or update a pastebin on the pastebin service.
+/// Create or update a pastebin on paste.lol.
 #[derive(Parser, Debug, Clone)]
 struct AddArgs {
-    /// Upload a file or update an existing file on the pastebin.\
+    /// Upload a file or update an existing file.
     #[arg(value_enum)]
     file: Option<String>,
 
@@ -25,13 +25,13 @@ struct AddArgs {
     content: Option<String>,
 }
 
-/// || rm - Remove a pastebin on the pastebin service.
+/// || rm - Remove a pastebin on paste.lol.
 #[derive(Parser, Debug, Clone)]
 struct RemoveArgs {
     title: String,
 }
 
-///  || dl - Download a pastebin.
+///  || dl - Download by title a pastebin.
 #[derive(Parser, Debug, Clone)]
 struct DownloadArgs {
     title: String,
@@ -41,7 +41,7 @@ struct DownloadArgs {
 #[derive(Parser, Debug, Clone)]
 struct ListArgs {}
 
-/// || cat - View the pastebin.
+/// || cat - View by title the pastebin.
 #[derive(Parser, Debug, Clone)]
 struct ViewArgs {
     title: String,
@@ -53,14 +53,14 @@ struct SearchArgs {
     title: String,
 }
 
-/// Change settings.
+/// || config - Change the settings.
 #[derive(Parser, Debug, Clone)]
 struct SettingsArgs {
-    ///  Set your username for the pastebin service.
+    ///  Set your username for paste.lol.
     #[structopt(long)]
     user: Option<String>,
 
-    ///  Set your API key for the pastebin service.
+    ///  Set your API key for paste.lol.
     #[structopt(long)]
     apikey: Option<String>,
 
@@ -138,7 +138,9 @@ impl Subcommand for CliSub {
             .subcommand(SearchArgs::augment_args(
                 Command::new("search").alias("find"),
             ))
-            .subcommand(SettingsArgs::augment_args(Command::new("settings")))
+            .subcommand(SettingsArgs::augment_args(
+                Command::new("settings").alias("config"),
+            ))
             .subcommand_required(true)
     }
     fn augment_subcommands_for_update(cmd: Command) -> Command {
@@ -152,7 +154,9 @@ impl Subcommand for CliSub {
             .subcommand(SearchArgs::augment_args(
                 Command::new("search").alias("find"),
             ))
-            .subcommand(SettingsArgs::augment_args(Command::new("settings")))
+            .subcommand(SettingsArgs::augment_args(
+                Command::new("settings").alias("config"),
+            ))
             .subcommand_required(true)
     }
     fn has_subcommand(name: &str) -> bool {
@@ -170,6 +174,7 @@ impl Subcommand for CliSub {
                 | "search"
                 | "find"
                 | "settings"
+                | "config"
         )
     }
 }
@@ -185,35 +190,30 @@ fn main() {
     let args = Cli::parse();
     let result = deserializer::deserialized();
     match result {
-        Ok(config) => {
-            // if args.setuser.is_some() || args.setapikey.is_some() || args.setunlist.is_some() {
-            //     check_user_and_api(args.clone(), config.clone());
-            // }
-            match &args.subcommand {
-                Some(CliSub::Add(args)) => {
-                    petition_manager::add(args, config);
-                }
-                Some(CliSub::Search(args)) => {
-                    petition_manager::search(args, config);
-                }
-                Some(CliSub::Download(args)) => {
-                    petition_manager::download(args, config);
-                }
-                Some(CliSub::View(args)) => {
-                    petition_manager::view(args, config);
-                }
-                Some(CliSub::Remove(args)) => {
-                    petition_manager::remove(args, config);
-                }
-                Some(CliSub::List(_)) => {
-                    petition_manager::list(config);
-                }
-                Some(CliSub::Settings(args)) => {
-                    config_manager::check_user_and_api(args, config);
-                }
-                None => println!("No command provided"),
+        Ok(config) => match &args.subcommand {
+            Some(CliSub::Add(args)) => {
+                petition_manager::add(args, config);
             }
-        }
+            Some(CliSub::Search(args)) => {
+                petition_manager::search(args, config);
+            }
+            Some(CliSub::Download(args)) => {
+                petition_manager::download(args, config);
+            }
+            Some(CliSub::View(args)) => {
+                petition_manager::view(args, config);
+            }
+            Some(CliSub::Remove(args)) => {
+                petition_manager::remove(args, config);
+            }
+            Some(CliSub::List(_)) => {
+                petition_manager::list(config);
+            }
+            Some(CliSub::Settings(args)) => {
+                config_manager::check_user_and_api(args, config);
+            }
+            None => println!("No command provided"),
+        },
 
         // First run
         Err(_e) => {

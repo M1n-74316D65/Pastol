@@ -11,13 +11,13 @@ pastol <COMMAND>
 ### Commands:
 
 ```
-add       Create or update a pastebin on the pastebin service
-remove    || rm - Remove a pastebin on the pastebin service
-download  || dl - Download a pastebin
+add       Create or update a pastebin on paste.lol
+remove    || rm - Remove a pastebin on paste.lol
+download  || dl - Download by title a pastebin
 list      || ls - List all pastebins
-view      || cat - View the pastebin
+view      || cat - View by title the pastebin
 search    || find - Search by title for pastebins
-settings  Change settings
+settings  || config - Change the settings
 help      Print this message or the help of the given subcommand(s)
 ```
 
