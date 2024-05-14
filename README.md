@@ -2,10 +2,10 @@
 
 Pastol enables users to interact with Paste.lol service directly from the command line. Pastol allows you to share text and files quickly and conveniently from the CL.
 
-## Usage
+### Usage
 
 ```sh
-pastol [OPTIONS] <COMMAND>
+pastol <COMMAND>
 ```
 
 ### Commands:
