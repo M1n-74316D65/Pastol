@@ -193,37 +193,37 @@ fn main() {
     match result {
         Ok(mut config) => match &args.subcommand {
             Some(CliSub::Add(args)) => {
-                if let Some(val) = env::var("api_omg_lol").ok() {
+                if let Ok(val) = env::var("api_omg_lol") {
                     config.api_key = val;
                 }
                 petition_manager::add(args, config);
             }
             Some(CliSub::Search(args)) => {
-                if let Some(val) = env::var("api_omg_lol").ok() {
+                if let Ok(val) = env::var("api_omg_lol") {
                     config.api_key = val;
                 }
                 petition_manager::search(args, config);
             }
             Some(CliSub::Download(args)) => {
-                if let Some(val) = env::var("api_omg_lol").ok() {
+                if let Ok(val) = env::var("api_omg_lol") {
                     config.api_key = val;
                 }
                 petition_manager::download(args, config);
             }
             Some(CliSub::View(args)) => {
-                if let Some(val) = env::var("api_omg_lol").ok() {
+                if let Ok(val) = env::var("api_omg_lol") {
                     config.api_key = val;
                 }
                 petition_manager::view(args, config);
             }
             Some(CliSub::Remove(args)) => {
-                if let Some(val) = env::var("api_omg_lol").ok() {
+                if let Ok(val) = env::var("api_omg_lol") {
                     config.api_key = val;
                 }
                 petition_manager::remove(args, config);
             }
             Some(CliSub::List(_)) => {
-                if let Some(val) = env::var("api_omg_lol").ok() {
+                if let Ok(val) = env::var("api_omg_lol") {
                     config.api_key = val;
                 }
                 petition_manager::list(config);
