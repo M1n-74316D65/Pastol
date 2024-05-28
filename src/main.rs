@@ -1,5 +1,6 @@
 use clap::error::{Error, ErrorKind};
 use clap::{ArgMatches, Args as _, Command, FromArgMatches, Parser, Subcommand};
+use std::env;
 
 mod config_manager;
 mod deserializer;
@@ -190,23 +191,41 @@ fn main() {
     let args = Cli::parse();
     let result = deserializer::deserialized();
     match result {
-        Ok(config) => match &args.subcommand {
+        Ok(mut config) => match &args.subcommand {
             Some(CliSub::Add(args)) => {
+                if let Some(val) = env::var("api_omg_lol").ok() {
+                    config.api_key = val;
+                }
                 petition_manager::add(args, config);
             }
             Some(CliSub::Search(args)) => {
+                if let Some(val) = env::var("api_omg_lol").ok() {
+                    config.api_key = val;
+                }
                 petition_manager::search(args, config);
             }
             Some(CliSub::Download(args)) => {
+                if let Some(val) = env::var("api_omg_lol").ok() {
+                    config.api_key = val;
+                }
                 petition_manager::download(args, config);
             }
             Some(CliSub::View(args)) => {
+                if let Some(val) = env::var("api_omg_lol").ok() {
+                    config.api_key = val;
+                }
                 petition_manager::view(args, config);
             }
             Some(CliSub::Remove(args)) => {
+                if let Some(val) = env::var("api_omg_lol").ok() {
+                    config.api_key = val;
+                }
                 petition_manager::remove(args, config);
             }
             Some(CliSub::List(_)) => {
+                if let Some(val) = env::var("api_omg_lol").ok() {
+                    config.api_key = val;
+                }
                 petition_manager::list(config);
             }
             Some(CliSub::Settings(args)) => {

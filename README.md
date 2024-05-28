@@ -112,6 +112,8 @@ help      Print this message or the help of the given subcommand(s)
 1.  Set user and API key.
     ```sh
     pastol --setuser your_username --setapikey your_api_key
+    
+    # if the env var api_omg_lol is set it will be used instead
     ```
 2.  Exampe as adam.
 
